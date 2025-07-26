@@ -12,24 +12,30 @@ import { TrendDetector } from './trend-detector';
 import Link from 'next/link';
 
 const allHealthData = [
-  { region: 'Jakarta', month: 'Jan', cases: 1200, vaccinations: 800, patients: 22000 },
-  { region: 'Jakarta', month: 'Feb', cases: 1500, vaccinations: 950, patients: 23500 },
-  { region: 'Jakarta', month: 'Mar', cases: 1300, vaccinations: 1100, patients: 24000 },
-  { region: 'Jakarta', month: 'Apr', cases: 1700, vaccinations: 1250, patients: 25500 },
-  { region: 'Jakarta', month: 'May', cases: 1600, vaccinations: 1400, patients: 26000 },
-  { region: 'Jakarta', month: 'Jun', cases: 1900, vaccinations: 1550, patients: 27500 },
-  { region: 'Bandung', month: 'Jan', cases: 800, vaccinations: 600, patients: 15000 },
-  { region: 'Bandung', month: 'Feb', cases: 950, vaccinations: 700, patients: 16000 },
-  { region: 'Bandung', month: 'Mar', cases: 850, vaccinations: 750, patients: 16500 },
-  { region: 'Bandung', month: 'Apr', cases: 1100, vaccinations: 850, patients: 17500 },
-  { region: 'Bandung', month: 'May', cases: 1000, vaccinations: 950, patients: 18000 },
-  { region: 'Bandung', month: 'Jun', cases: 1200, vaccinations: 1100, patients: 19000 },
-  { region: 'Surabaya', month: 'Jan', cases: 1000, vaccinations: 700, patients: 18000 },
-  { region: 'Surabaya', month: 'Feb', cases: 1100, vaccinations: 800, patients: 19000 },
-  { region: 'Surabaya', month: 'Mar', cases: 950, vaccinations: 900, patients: 19500 },
-  { region: 'Surabaya', month: 'Apr', cases: 1300, vaccinations: 1000, patients: 21000 },
-  { region: 'Surabaya', month: 'May', cases: 1250, vaccinations: 1150, patients: 22000 },
-  { region: 'Surabaya', month: 'Jun', cases: 1400, vaccinations: 1300, patients: 23000 },
+  { region: 'Jakarta Pusat', month: 'Jan', cases: 1200, vaccinations: 800, patients: 22000 },
+  { region: 'Jakarta Pusat', month: 'Feb', cases: 1500, vaccinations: 950, patients: 23500 },
+  { region: 'Jakarta Pusat', month: 'Mar', cases: 1300, vaccinations: 1100, patients: 24000 },
+  { region: 'Jakarta Pusat', month: 'Apr', cases: 1700, vaccinations: 1250, patients: 25500 },
+  { region: 'Jakarta Pusat', month: 'May', cases: 1600, vaccinations: 1400, patients: 26000 },
+  { region: 'Jakarta Pusat', month: 'Jun', cases: 1900, vaccinations: 1550, patients: 27500 },
+  { region: 'Jakarta Barat', month: 'Jan', cases: 800, vaccinations: 600, patients: 15000 },
+  { region: 'Jakarta Barat', month: 'Feb', cases: 950, vaccinations: 700, patients: 16000 },
+  { region: 'Jakarta Barat', month: 'Mar', cases: 850, vaccinations: 750, patients: 16500 },
+  { region: 'Jakarta Barat', month: 'Apr', cases: 1100, vaccinations: 850, patients: 17500 },
+  { region: 'Jakarta Barat', month: 'May', cases: 1000, vaccinations: 950, patients: 18000 },
+  { region: 'Jakarta Barat', month: 'Jun', cases: 1200, vaccinations: 1100, patients: 19000 },
+  { region: 'Jakarta Selatan', month: 'Jan', cases: 1000, vaccinations: 700, patients: 18000 },
+  { region: 'Jakarta Selatan', month: 'Feb', cases: 1100, vaccinations: 800, patients: 19000 },
+  { region: 'Jakarta Selatan', month: 'Mar', cases: 950, vaccinations: 900, patients: 19500 },
+  { region: 'Jakarta Selatan', month: 'Apr', cases: 1300, vaccinations: 1000, patients: 21000 },
+  { region: 'Jakarta Selatan', month: 'May', cases: 1250, vaccinations: 1150, patients: 22000 },
+  { region: 'Jakarta Selatan', month: 'Jun', cases: 1400, vaccinations: 1300, patients: 23000 },
+  { region: 'Jakarta Timur', month: 'Jan', cases: 900, vaccinations: 650, patients: 17000 },
+  { region: 'Jakarta Timur', month: 'Feb', cases: 1000, vaccinations: 750, patients: 18000 },
+  { region: 'Jakarta Utara', month: 'Jan', cases: 700, vaccinations: 500, patients: 14000 },
+  { region: 'Jakarta Utara', month: 'Feb', cases: 850, vaccinations: 600, patients: 15000 },
+  { region: 'Kepulauan Seribu', month: 'Jan', cases: 50, vaccinations: 30, patients: 1000 },
+  { region: 'Kepulauan Seribu', month: 'Feb', cases: 60, vaccinations: 40, patients: 1100 },
 ];
 
 const chartConfig = {
@@ -50,7 +56,7 @@ const aggregatedDataForAI = {
   };
 
 export function DashboardPage() {
-  const [region, setRegion] = React.useState('Jakarta');
+  const [region, setRegion] = React.useState('Jakarta Pusat');
   const [isClient, setIsClient] = React.useState(false);
 
   React.useEffect(() => {
@@ -63,6 +69,9 @@ export function DashboardPage() {
 
   const kpiData = React.useMemo(() => {
     const data = filteredData;
+    if (data.length === 0) {
+      return { totalCases: 0, totalVaccinations: 0, totalPatients: 0, caseTrend: 0 };
+    }
     const totalCases = data.reduce((acc, item) => acc + item.cases, 0);
     const totalVaccinations = data.reduce((acc, item) => acc + item.vaccinations, 0);
     const totalPatients = data[data.length - 1]?.patients || 0;
@@ -96,9 +105,12 @@ export function DashboardPage() {
                 <SelectValue placeholder="Select Region" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="Jakarta">Jakarta</SelectItem>
-                <SelectItem value="Bandung">Bandung</SelectItem>
-                <SelectItem value="Surabaya">Surabaya</SelectItem>
+                <SelectItem value="Jakarta Pusat">Jakarta Pusat</SelectItem>
+                <SelectItem value="Jakarta Utara">Jakarta Utara</SelectItem>
+                <SelectItem value="Jakarta Barat">Jakarta Barat</SelectItem>
+                <SelectItem value="Jakarta Selatan">Jakarta Selatan</SelectItem>
+                <SelectItem value="Jakarta Timur">Jakarta Timur</SelectItem>
+                <SelectItem value="Kepulauan Seribu">Kepulauan Seribu</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -143,7 +155,7 @@ export function DashboardPage() {
               <CardContent>
                 <div className="text-2xl font-bold">{isClient ? kpiData.totalCases.toLocaleString() : kpiData.totalCases}</div>
                 <p className="text-xs text-muted-foreground">
-                  {isClient ? kpiData.caseTrend.toFixed(2) : kpiData.caseTrend.toFixed(0)}% change
+                  {isClient ? `${kpiData.caseTrend.toFixed(2)}% change` : ''}
                 </p>
               </CardContent>
             </Card>

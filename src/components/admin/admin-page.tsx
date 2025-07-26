@@ -128,14 +128,17 @@ export function AdminPage() {
               </div>
               <div className="space-y-2">
                 <Label htmlFor="default-region">Default Region</Label>
-                <Select defaultValue="Jakarta">
+                <Select defaultValue="Jakarta Pusat">
                   <SelectTrigger id="default-region">
                     <SelectValue placeholder="Select a default region" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="Jakarta">Jakarta</SelectItem>
-                    <SelectItem value="Bandung">Bandung</SelectItem>
-                    <SelectItem value="Surabaya">Surabaya</SelectItem>
+                    <SelectItem value="Jakarta Pusat">Jakarta Pusat</SelectItem>
+                    <SelectItem value="Jakarta Utara">Jakarta Utara</SelectItem>
+                    <SelectItem value="Jakarta Barat">Jakarta Barat</SelectItem>
+                    <SelectItem value="Jakarta Selatan">Jakarta Selatan</SelectItem>
+                    <SelectItem value="Jakarta Timur">Jakarta Timur</SelectItem>
+                    <SelectItem value="Kepulauan Seribu">Kepulauan Seribu</SelectItem>
                     <SelectItem value="All">All Regions</SelectItem>
                   </SelectContent>
                 </Select>
