@@ -76,6 +76,7 @@ export function ProfilePage() {
         <nav className="ml-4 hidden md:flex items-center gap-4 text-sm font-medium text-muted-foreground">
             <Link href="/" className="hover:text-foreground transition-colors">Dashboard</Link>
             <Link href="/upload" className="hover:text-foreground transition-colors">Data Management</Link>
+            <Link href="/search" className="hover:text-foreground transition-colors">NIK Search</Link>
             <Link href="/profile" className="text-primary font-semibold">Profile</Link>
             <Link href="/admin" className="hover:text-foreground transition-colors">Admin</Link>
         </nav>

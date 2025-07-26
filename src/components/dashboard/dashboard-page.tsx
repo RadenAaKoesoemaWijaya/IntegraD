@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
-import { Users, Stethoscope, Syringe, TrendingUp, Filter, FileDown, Bot, Upload, User, Settings } from 'lucide-react';
+import { Users, Stethoscope, Syringe, TrendingUp, Filter, FileDown, Bot, Upload, User, Settings, Search } from 'lucide-react';
 import { Logo } from './icons';
 import { TrendDetector } from './trend-detector';
 import Link from 'next/link';
@@ -84,6 +84,7 @@ export function DashboardPage() {
         <nav className="ml-4 hidden md:flex items-center gap-4 text-sm font-medium text-muted-foreground">
             <Link href="/" className="text-primary font-semibold">Dashboard</Link>
             <Link href="/upload" className="hover:text-foreground transition-colors">Data Management</Link>
+            <Link href="/search" className="hover:text-foreground transition-colors">NIK Search</Link>
             <Link href="/profile" className="hover:text-foreground transition-colors">Profile</Link>
             <Link href="/admin" className="hover:text-foreground transition-colors">Admin</Link>
         </nav>
@@ -122,9 +123,17 @@ export function DashboardPage() {
       </header>
       <main className="flex-1 p-4 sm:p-6">
         <section>
-          <h2 className="text-xl font-semibold text-foreground/90 mb-4">
-            Health Overview: <span className="text-primary">{region}</span>
-          </h2>
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-xl font-semibold text-foreground/90">
+                Health Overview: <span className="text-primary">{region}</span>
+            </h2>
+            <Button asChild>
+                <Link href="/search">
+                    <Search className="mr-2 h-4 w-4" />
+                    Pencarian NIK
+                </Link>
+            </Button>
+          </div>
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">

@@ -71,6 +71,7 @@ export function DataManagerPage() {
         <nav className="ml-4 hidden md:flex items-center gap-4 text-sm font-medium text-muted-foreground">
             <Link href="/" className="hover:text-foreground transition-colors">Dashboard</Link>
             <Link href="/upload" className="text-primary font-semibold">Data Management</Link>
+            <Link href="/search" className="hover:text-foreground transition-colors">NIK Search</Link>
             <Link href="/profile" className="hover:text-foreground transition-colors">Profile</Link>
             <Link href="/admin" className="hover:text-foreground transition-colors">Admin</Link>
         </nav>
