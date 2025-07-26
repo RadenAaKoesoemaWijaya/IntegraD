@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
-import { Users, Stethoscope, Syringe, TrendingUp, Filter, FileDown, Bot, Upload } from 'lucide-react';
+import { Users, Stethoscope, Syringe, TrendingUp, Filter, FileDown, Bot, Upload, User, Settings } from 'lucide-react';
 import { Logo } from './icons';
 import { TrendDetector } from './trend-detector';
 import Link from 'next/link';
@@ -84,6 +84,8 @@ export function DashboardPage() {
         <nav className="ml-4 hidden md:flex items-center gap-4 text-sm font-medium text-muted-foreground">
             <Link href="/" className="text-primary font-semibold">Dashboard</Link>
             <Link href="/upload" className="hover:text-foreground transition-colors">Data Management</Link>
+            <Link href="/profile" className="hover:text-foreground transition-colors">Profile</Link>
+            <Link href="/admin" className="hover:text-foreground transition-colors">Admin</Link>
         </nav>
         <div className="ml-auto flex items-center gap-2 no-print">
           <div className="flex items-center gap-2">
@@ -103,6 +105,18 @@ export function DashboardPage() {
           <Button variant="outline" onClick={handlePrint}>
             <FileDown className="mr-2 h-4 w-4" />
             Export Report
+          </Button>
+          <Button variant="ghost" size="icon" asChild>
+            <Link href="/profile">
+              <User className="h-5 w-5" />
+              <span className="sr-only">Profile</span>
+            </Link>
+          </Button>
+          <Button variant="ghost" size="icon" asChild>
+            <Link href="/admin">
+              <Settings className="h-5 w-5" />
+              <span className="sr-only">Admin Settings</span>
+            </Link>
           </Button>
         </div>
       </header>

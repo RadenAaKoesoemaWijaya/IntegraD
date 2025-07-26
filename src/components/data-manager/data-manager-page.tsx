@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Upload, FileDown, PlusCircle, Search } from 'lucide-react';
+import { Upload, FileDown, PlusCircle, User, Settings } from 'lucide-react';
 import { DataTable } from './data-table';
 import { columns } from './columns';
 import { HealthData, initialHealthData, ProgramManager } from './schema';
@@ -71,7 +71,23 @@ export function DataManagerPage() {
         <nav className="ml-4 hidden md:flex items-center gap-4 text-sm font-medium text-muted-foreground">
             <Link href="/" className="hover:text-foreground transition-colors">Dashboard</Link>
             <Link href="/upload" className="text-primary font-semibold">Data Management</Link>
+            <Link href="/profile" className="hover:text-foreground transition-colors">Profile</Link>
+            <Link href="/admin" className="hover:text-foreground transition-colors">Admin</Link>
         </nav>
+        <div className="ml-auto flex items-center gap-2">
+            <Button variant="ghost" size="icon" asChild>
+                <Link href="/profile">
+                <User className="h-5 w-5" />
+                <span className="sr-only">Profile</span>
+                </Link>
+            </Button>
+            <Button variant="ghost" size="icon" asChild>
+                <Link href="/admin">
+                <Settings className="h-5 w-5" />
+                <span className="sr-only">Admin Settings</span>
+                </Link>
+            </Button>
+        </div>
       </header>
       <main className="flex-1 p-4 sm:p-6">
         <div className="space-y-6">
