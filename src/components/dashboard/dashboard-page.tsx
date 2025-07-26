@@ -6,9 +6,10 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
-import { Users, Stethoscope, Syringe, TrendingUp, Filter, FileDown, Bot } from 'lucide-react';
+import { Users, Stethoscope, Syringe, TrendingUp, Filter, FileDown, Bot, Upload } from 'lucide-react';
 import { Logo } from './icons';
 import { TrendDetector } from './trend-detector';
+import Link from 'next/link';
 
 const allHealthData = [
   { region: 'Jakarta', month: 'Jan', cases: 1200, vaccinations: 800, patients: 22000 },
@@ -80,6 +81,10 @@ export function DashboardPage() {
           <Logo className="h-8 w-8 text-primary" />
           <h1 className="text-2xl font-semibold text-foreground">SehatData</h1>
         </div>
+        <nav className="ml-4 hidden md:flex items-center gap-4 text-sm font-medium text-muted-foreground">
+            <Link href="/" className="text-primary font-semibold">Dashboard</Link>
+            <Link href="/upload" className="hover:text-foreground transition-colors">Data Management</Link>
+        </nav>
         <div className="ml-auto flex items-center gap-2 no-print">
           <div className="flex items-center gap-2">
             <Filter className="h-4 w-4 text-muted-foreground" />

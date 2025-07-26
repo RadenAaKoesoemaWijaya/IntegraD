@@ -1,0 +1,200 @@
+"use client"
+
+import * as React from "react"
+import {
+  ColumnDef,
+  ColumnFiltersState,
+  SortingState,
+  VisibilityState,
+  flexRender,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  useReactTable,
+} from "@tanstack/react-table"
+
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { DataTableViewOptions } from "./data-table-view-options"
+import { HealthData } from "./schema"
+import { DataTableFacetedFilter } from "./data-table-faceted-filter"
+import { PlusCircle } from "lucide-react"
+import { DataEditorDialog } from "./data-editor-dialog"
+
+interface DataTableProps<TData, TValue> {
+  columns: ColumnDef<TData, TValue>[]
+  data: TData[]
+  setData: React.Dispatch<React.SetStateAction<TData[]>>
+}
+
+export function DataTable<TData extends HealthData, TValue>({
+  columns,
+  data,
+  setData,
+}: DataTableProps<TData, TValue>) {
+  const [sorting, setSorting] = React.useState<SortingState>([])
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
+  const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
+  const [rowSelection, setRowSelection] = React.useState({})
+
+  const table = useReactTable({
+    data,
+    columns,
+    onSortingChange: setSorting,
+    onColumnFiltersChange: setColumnFilters,
+    getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    onColumnVisibilityChange: setColumnVisibility,
+    onRowSelectionChange: setRowSelection,
+    state: {
+      sorting,
+      columnFilters,
+      columnVisibility,
+      rowSelection,
+    },
+    meta: {
+        updateData: (rowIndex: number, columnId: string, value: any) => {
+            setData(old =>
+              old.map((row, index) => {
+                if (index === rowIndex) {
+                  return {
+                    ...old[rowIndex]!,
+                    [columnId]: value,
+                  }
+                }
+                return row
+              })
+            )
+          },
+          removeRow: (rowIndex: number) => {
+            setData(old => old.filter((_, index) => index !== rowIndex));
+          },
+          addRow: (newRow: TData) => {
+            setData(old => [...old, newRow]);
+          },
+          updateRow: (rowIndex: number, newRow: TData) => {
+            setData(old => old.map((row, index) => index === rowIndex ? newRow : row));
+          }
+    }
+  })
+
+  const uniqueRegions = React.useMemo(() => {
+    const regions = new Set(data.map(item => item.region));
+    return Array.from(regions).map(region => ({ label: region, value: region }));
+  }, [data]);
+
+  return (
+    <div className="space-y-4">
+      <div className="flex items-center justify-between">
+        <div className="flex flex-1 items-center space-x-2">
+          <Input
+            placeholder="Filter by region..."
+            value={(table.getColumn("region")?.getFilterValue() as string) ?? ""}
+            onChange={(event) =>
+              table.getColumn("region")?.setFilterValue(event.target.value)
+            }
+            className="h-8 w-[150px] lg:w-[250px]"
+          />
+          {table.getColumn("region") && (
+            <DataTableFacetedFilter
+              column={table.getColumn("region")}
+              title="Region"
+              options={uniqueRegions}
+            />
+          )}
+        </div>
+        <div className="flex items-center space-x-2">
+            <DataEditorDialog
+                variant="add"
+                onSave={(newRow) => table.options.meta?.addRow?.(newRow as TData)}
+            >
+                <Button variant="outline" size="sm" className="h-8">
+                    <PlusCircle className="mr-2 h-4 w-4" />
+                    Add Record
+                </Button>
+            </DataEditorDialog>
+            <DataTableViewOptions table={table} />
+        </div>
+      </div>
+      <div className="rounded-md border">
+        <Table>
+          <TableHeader>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow key={headerGroup.id}>
+                {headerGroup.headers.map((header) => {
+                  return (
+                    <TableHead key={header.id}>
+                      {header.isPlaceholder
+                        ? null
+                        : flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
+                    </TableHead>
+                  )
+                })}
+              </TableRow>
+            ))}
+          </TableHeader>
+          <TableBody>
+            {table.getRowModel().rows?.length ? (
+              table.getRowModel().rows.map((row) => (
+                <TableRow
+                  key={row.id}
+                  data-state={row.getIsSelected() && "selected"}
+                >
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id}>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell
+                  colSpan={columns.length}
+                  className="h-24 text-center"
+                >
+                  No results.
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </div>
+      <div className="flex items-center justify-end space-x-2 py-4">
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => table.previousPage()}
+          disabled={!table.getCanPreviousPage()}
+        >
+          Previous
+        </Button>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => table.nextPage()}
+          disabled={!table.getCanNextPage()}
+        >
+          Next
+        </Button>
+      </div>
+    </div>
+  )
+}
