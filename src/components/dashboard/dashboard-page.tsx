@@ -50,6 +50,11 @@ const aggregatedDataForAI = {
 
 export function DashboardPage() {
   const [region, setRegion] = React.useState('Jakarta');
+  const [isClient, setIsClient] = React.useState(false);
+
+  React.useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   const filteredData = React.useMemo(() => {
     return allHealthData.filter((d) => d.region === region);
@@ -108,9 +113,9 @@ export function DashboardPage() {
                 <Stethoscope className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">{kpiData.totalCases.toLocaleString()}</div>
+                <div className="text-2xl font-bold">{isClient ? kpiData.totalCases.toLocaleString() : kpiData.totalCases}</div>
                 <p className="text-xs text-muted-foreground">
-                  {kpiData.caseTrend.toFixed(2)}% change
+                  {isClient ? kpiData.caseTrend.toFixed(2) : kpiData.caseTrend.toFixed(0)}% change
                 </p>
               </CardContent>
             </Card>
@@ -120,7 +125,7 @@ export function DashboardPage() {
                 <Syringe className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">{kpiData.totalVaccinations.toLocaleString()}</div>
+                <div className="text-2xl font-bold">{isClient ? kpiData.totalVaccinations.toLocaleString() : kpiData.totalVaccinations}</div>
                 <p className="text-xs text-muted-foreground">Last 6 months</p>
               </CardContent>
             </Card>
@@ -130,7 +135,7 @@ export function DashboardPage() {
                 <Users className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">{kpiData.totalPatients.toLocaleString()}</div>
+                <div className="text-2xl font-bold">{isClient ? kpiData.totalPatients.toLocaleString() : kpiData.totalPatients}</div>
                 <p className="text-xs text-muted-foreground">Current estimate</p>
               </CardContent>
             </Card>
