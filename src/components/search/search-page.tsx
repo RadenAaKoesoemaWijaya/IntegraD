@@ -14,14 +14,14 @@ import { HealthData } from '../data-manager/schema';
 import { Alert, AlertDescription, AlertTitle } from '../ui/alert';
 
 const mockDatasets = [
-    { id: 'dinkes-jakarta', name: 'Dinas Kesehatan Jakarta', data: [
+    { id: 'seksi-p2p', name: 'Seksi Pencegahan dan Penanggulangan Penyakit', data: [
         { id: 'rec-001', nik: '3171234567890001', name: 'Budi Santoso', address: 'Jl. Merdeka No. 1, Jakarta' },
         { id: 'rec-002', nik: '3171234567890002', name: 'Citra Lestari', address: 'Jl. Pahlawan No. 10, Jakarta' },
     ]},
-    { id: 'dinkes-bandung', name: 'Dinas Kesehatan Bandung', data: [
+    { id: 'seksi-sdk', name: 'Seksi Sumber Daya Kesehatan', data: [
         { id: 'rec-003', nik: '3273123456789001', name: 'Agus Wijaya', address: 'Jl. Asia Afrika No. 5, Bandung' },
     ]},
-    { id: 'kemenkes-ri', name: 'Kementerian Kesehatan RI', data: [
+    { id: 'seksi-kesmas', name: 'Seksi Kesehatan Masyarakat', data: [
         { id: 'rec-004', nik: '3171234567890001', name: 'Budi Santoso', address: 'Jl. Merdeka No. 1, Jakarta (Pusat)' },
     ]},
 ];

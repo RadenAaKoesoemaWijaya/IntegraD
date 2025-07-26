@@ -16,14 +16,15 @@ import { useToast } from '@/hooks/use-toast';
 
 export function DataManagerPage() {
   const [data, setData] = React.useState<HealthData[]>(initialHealthData);
-  const [selectedManager, setSelectedManager] = React.useState<string>('dinkes-jakarta');
+  const [selectedManager, setSelectedManager] = React.useState<string>('seksi-p2p');
   const [file, setFile] = React.useState<File | null>(null);
   const { toast } = useToast();
 
   const programManagers: ProgramManager[] = [
-    { id: 'dinkes-jakarta', name: 'Dinas Kesehatan Jakarta' },
-    { id: 'dinkes-bandung', name: 'Dinas Kesehatan Bandung' },
-    { id: 'kemenkes-ri', name: 'Kementerian Kesehatan RI' },
+    { id: 'seksi-p2p', name: 'Seksi Pencegahan dan Penanggulangan Penyakit' },
+    { id: 'seksi-sdk', name: 'Seksi Sumber Daya Kesehatan' },
+    { id: 'seksi-kesmas', name: 'Seksi Kesehatan Masyarakat' },
+    { id: 'seksi-yankes', name: 'Seksi Pelayanan Kesehatan' },
   ];
 
   const handleFileUpload = () => {
@@ -38,7 +39,7 @@ export function DataManagerPage() {
     // Mock file processing
     toast({
         title: "Upload Successful",
-        description: `File ${file.name} has been uploaded for ${selectedManager}.`,
+        description: `File ${file.name} has been uploaded for ${programManagers.find(p => p.id === selectedManager)?.name}.`,
       });
     // In a real app, you would parse the CSV/JSON and update the state
     // For now, we'll just show a success message.
@@ -97,14 +98,14 @@ export function DataManagerPage() {
           <Card>
             <CardHeader>
               <CardTitle>Upload Dataset Baru</CardTitle>
-              <CardDescription>Upload file CSV atau JSON untuk penanggung jawab program yang dipilih.</CardDescription>
+              <CardDescription>Upload file CSV atau JSON untuk seksi dinas kesehatan yang dipilih.</CardDescription>
             </CardHeader>
             <CardContent className="grid gap-6 md:grid-cols-3">
               <div className="space-y-2">
-                <Label htmlFor="program-manager">Penanggung Jawab Program</Label>
+                <Label htmlFor="program-manager">Seksi Dinas Kesehatan</Label>
                 <Select value={selectedManager} onValueChange={setSelectedManager}>
                   <SelectTrigger id="program-manager">
-                    <SelectValue placeholder="Pilih Penanggung Jawab" />
+                    <SelectValue placeholder="Pilih Seksi" />
                   </SelectTrigger>
                   <SelectContent>
                     {programManagers.map(manager => (
