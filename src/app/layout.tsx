@@ -2,12 +2,12 @@ import { Inter } from 'next/font/google';
 import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
 import { cn } from '@/lib/utils';
-import { notFound } from 'next/navigation';
+import { i18n } from '@/i18n-config';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-body' });
 
 export function generateStaticParams() {
-  return [{ lang: 'en' }, { lang: 'id' }];
+  return i18n.locales.map((locale) => ({ lang: locale }))
 }
 
 export const metadata = {
@@ -22,10 +22,6 @@ export default function RootLayout({
   children: React.ReactNode;
   params: { lang: string };
 }>) {
-  if (!['en', 'id'].includes(params.lang)) {
-    notFound();
-  }
-
   return (
     <html lang={params.lang} suppressHydrationWarning>
       <head>

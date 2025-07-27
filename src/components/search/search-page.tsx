@@ -19,9 +19,10 @@ export type SearchResult = {
 
 type SearchPageProps = {
     dictionary: any;
+    lang: string;
 };
 
-export function SearchPage({ dictionary }: SearchPageProps) {
+export function SearchPage({ dictionary, lang }: SearchPageProps) {
     const { toast } = useToast();
     const [nik, setNik] = React.useState('');
     const [selectedDatasets, setSelectedDatasets] = React.useState<string[]>([]);
@@ -76,7 +77,7 @@ export function SearchPage({ dictionary }: SearchPageProps) {
 
     return (
         <div className="flex min-h-screen w-full flex-col">
-            <Header dictionary={dictionary} lang={dictionary.lang} />
+            <Header dictionary={dictionary} lang={lang} />
             <main className="flex-1 p-4 sm:p-6">
                 <div className="mx-auto max-w-4xl space-y-6">
                     <h2 className="text-2xl font-semibold text-foreground/90">{t.title}</h2>

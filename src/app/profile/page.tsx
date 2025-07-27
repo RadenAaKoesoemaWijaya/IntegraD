@@ -1,7 +1,8 @@
 import { ProfilePage } from "@/components/profile/profile-page";
 import { getDictionary } from "@/lib/dictionaries";
+import { Locale } from "@/i18n-config";
 
-export default async function Page({ params: { lang } }: { params: { lang: string } }) {
-    const dictionary = await getDictionary(lang as any);
-    return <ProfilePage dictionary={dictionary} lang={lang} />;
+export default async function Page({ params: { lang } }: { params: { lang: Locale } }) {
+    const dictionary = await getDictionary(lang || 'id');
+    return <ProfilePage dictionary={dictionary} lang={lang || 'id'} />;
 }
