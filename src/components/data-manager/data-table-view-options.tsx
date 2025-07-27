@@ -15,11 +15,14 @@ import {
 
 interface DataTableViewOptionsProps<TData> {
   table: Table<TData>
+  dictionary: any
 }
 
 export function DataTableViewOptions<TData>({
   table,
+  dictionary
 }: DataTableViewOptionsProps<TData>) {
+  const { dataManagement: t } = dictionary;
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -29,7 +32,7 @@ export function DataTableViewOptions<TData>({
           className="ml-auto hidden h-8 lg:flex"
         >
           <MixerHorizontalIcon className="mr-2 h-4 w-4" />
-          View
+          {t.view}
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-[150px]">

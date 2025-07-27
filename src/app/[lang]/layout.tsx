@@ -1,5 +1,5 @@
 import { Inter } from 'next/font/google';
-import './globals.css';
+import '../globals.css';
 import { Toaster } from '@/components/ui/toaster';
 import { cn } from '@/lib/utils';
 import { notFound } from 'next/navigation';
@@ -22,10 +22,10 @@ export default function RootLayout({
   children: React.ReactNode;
   params: { lang: string };
 }>) {
-  if (!['en', 'id'].includes(params.lang)) {
-    notFound();
-  }
-
+    if (!['en', 'id'].includes(params.lang)) {
+        notFound();
+    }
+    
   return (
     <html lang={params.lang} suppressHydrationWarning>
       <head>

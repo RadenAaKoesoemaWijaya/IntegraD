@@ -1,7 +1,6 @@
 'use client';
 
 import * as React from 'react';
-import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -10,15 +9,21 @@ import { Switch } from '@/components/ui/switch';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import { Logo } from '../dashboard/icons';
 import { User, Settings, MoreHorizontal, UserPlus, Loader2, AlertTriangle } from 'lucide-react';
 import { User as UserType } from './schema';
 import { getUsers } from '@/lib/api';
+import { Header } from '../common/header';
 
-export function AdminPage() {
+type AdminPageProps = {
+    dictionary: any;
+    lang: string;
+};
+
+export function AdminPage({ dictionary, lang }: AdminPageProps) {
   const [users, setUsers] = React.useState<UserType[]>([]);
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState<string | null>(null);
+  const { admin: t } = dictionary;
 
   React.useEffect(() => {
     const fetchUsers = async () => {
@@ -27,58 +32,32 @@ export function AdminPage() {
         const fetchedUsers = await getUsers();
         setUsers(fetchedUsers);
       } catch (err) {
-        setError('Failed to load users. Please try again later.');
+        setError(t.errorLoadUsers);
       } finally {
         setLoading(false);
       }
     };
     fetchUsers();
-  }, []);
+  }, [t]);
 
   return (
     <div className="flex min-h-screen w-full flex-col">
-      <header className="sticky top-0 z-30 flex items-center gap-4 border-b bg-background/95 px-4 py-2 backdrop-blur-sm sm:px-6">
-        <div className="flex items-center gap-2">
-          <Logo className="h-8 w-8 text-primary" />
-          <h1 className="text-2xl font-semibold text-foreground">SehatData</h1>
-        </div>
-        <nav className="ml-4 hidden md:flex items-center gap-4 text-sm font-medium text-muted-foreground">
-          <Link href="/" className="hover:text-foreground transition-colors">Dashboard</Link>
-          <Link href="/upload" className="hover:text-foreground transition-colors">Data Management</Link>
-          <Link href="/search" className="hover:text-foreground transition-colors">Pencarian Data</Link>
-          <Link href="/profile" className="hover:text-foreground transition-colors">Profile</Link>
-          <Link href="/admin" className="text-primary font-semibold">Admin</Link>
-        </nav>
-        <div className="ml-auto flex items-center gap-2">
-          <Button variant="ghost" size="icon" asChild>
-            <Link href="/profile">
-              <User className="h-5 w-5" />
-              <span className="sr-only">Profile</span>
-            </Link>
-          </Button>
-          <Button variant="ghost" size="icon" asChild>
-            <Link href="/admin">
-              <Settings className="h-5 w-5" />
-              <span className="sr-only">Admin Settings</span>
-            </Link>
-          </Button>
-        </div>
-      </header>
+      <Header dictionary={dictionary} lang={lang} />
 
       <main className="flex-1 p-4 sm:p-6">
         <div className="mx-auto max-w-6xl space-y-6">
-          <h2 className="text-2xl font-semibold text-foreground/90">Admin Settings</h2>
+          <h2 className="text-2xl font-semibold text-foreground/90">{t.title}</h2>
 
           <Card>
             <CardHeader>
               <div className="flex items-center justify-between">
                 <div>
-                    <CardTitle>User Management</CardTitle>
-                    <CardDescription>Manage user accounts, roles, and permissions.</CardDescription>
+                    <CardTitle>{t.userManagement}</CardTitle>
+                    <CardDescription>{t.userManagementDesc}</CardDescription>
                 </div>
                 <Button>
                     <UserPlus className="mr-2 h-4 w-4" />
-                    Add User
+                    {t.addUser}
                 </Button>
               </div>
             </CardHeader>
@@ -86,7 +65,7 @@ export function AdminPage() {
               {loading ? (
                 <div className="flex justify-center items-center py-8">
                   <Loader2 className="h-8 w-8 animate-spin text-primary" />
-                  <p className="ml-2">Loading users...</p>
+                  <p className="ml-2">{t.loadingUsers}</p>
                 </div>
               ) : error ? (
                 <div className="text-red-600 flex items-center justify-center py-8">
@@ -96,11 +75,11 @@ export function AdminPage() {
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>Name</TableHead>
-                      <TableHead>Email</TableHead>
-                      <TableHead>Role</TableHead>
-                      <TableHead>Status</TableHead>
-                      <TableHead><span className="sr-only">Actions</span></TableHead>
+                      <TableHead>{t.name}</TableHead>
+                      <TableHead>{t.email}</TableHead>
+                      <TableHead>{t.role}</TableHead>
+                      <TableHead>{t.status}</TableHead>
+                      <TableHead><span className="sr-only">{t.actions}</span></TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -119,10 +98,10 @@ export function AdminPage() {
                               </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end">
-                              <DropdownMenuItem>Edit</DropdownMenuItem>
-                              <DropdownMenuItem>Change Role</DropdownMenuItem>
-                              <DropdownMenuItem>{user.status === 'Active' ? 'Deactivate' : 'Activate'}</DropdownMenuItem>
-                              <DropdownMenuItem className="text-red-600">Delete</DropdownMenuItem>
+                              <DropdownMenuItem>{t.edit}</DropdownMenuItem>
+                              <DropdownMenuItem>{t.changeRole}</DropdownMenuItem>
+                              <DropdownMenuItem>{user.status === 'Active' ? t.deactivate : t.activate}</DropdownMenuItem>
+                              <DropdownMenuItem className="text-red-600">{t.delete}</DropdownMenuItem>
                             </DropdownMenuContent>
                           </DropdownMenu>
                         </TableCell>
@@ -136,35 +115,35 @@ export function AdminPage() {
 
           <Card>
             <CardHeader>
-              <CardTitle>System Settings</CardTitle>
-              <CardDescription>Configure application-wide settings.</CardDescription>
+              <CardTitle>{t.systemSettings}</CardTitle>
+              <CardDescription>{t.systemSettingsDesc}</CardDescription>
             </CardHeader>
             <CardContent className="grid gap-6 sm:grid-cols-2">
               <div className="space-y-2">
-                <Label htmlFor="maintenance-mode">Maintenance Mode</Label>
+                <Label htmlFor="maintenance-mode">{t.maintenanceMode}</Label>
                 <div className="flex items-center space-x-2">
                     <Switch id="maintenance-mode" />
-                    <Label htmlFor="maintenance-mode">Enable maintenance mode to take the site offline.</Label>
+                    <Label htmlFor="maintenance-mode">{t.maintenanceModeDesc}</Label>
                 </div>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="session-timeout">Session Timeout (minutes)</Label>
+                <Label htmlFor="session-timeout">{t.sessionTimeout}</Label>
                 <Input id="session-timeout" type="number" defaultValue="30" />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="default-region">Default Region</Label>
+                <Label htmlFor="default-region">{t.defaultRegion}</Label>
                 <Select defaultValue="Jakarta Pusat">
                   <SelectTrigger id="default-region">
-                    <SelectValue placeholder="Select a default region" />
+                    <SelectValue placeholder={t.selectDefaultRegion} />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="Jakarta Pusat">Jakarta Pusat</SelectItem>
-                    <SelectItem value="Jakarta Utara">Jakarta Utara</SelectItem>
-                    <SelectItem value="Jakarta Barat">Jakarta Barat</SelectItem>
-                    <SelectItem value="Jakarta Selatan">Jakarta Selatan</SelectItem>
-                    <SelectItem value="Jakarta Timur">Jakarta Timur</SelectItem>
-                    <SelectItem value="Kepulauan Seribu">Kepulauan Seribu</SelectItem>
-                    <SelectItem value="All">All Regions</SelectItem>
+                    <SelectItem value="Jakarta Pusat">{dictionary.regions.pusat}</SelectItem>
+                    <SelectItem value="Jakarta Utara">{dictionary.regions.utara}</SelectItem>
+                    <SelectItem value="Jakarta Barat">{dictionary.regions.barat}</SelectItem>
+                    <SelectItem value="Jakarta Selatan">{dictionary.regions.selatan}</SelectItem>
+                    <SelectItem value="Jakarta Timur">{dictionary.regions.timur}</SelectItem>
+                    <SelectItem value="Kepulauan Seribu">{dictionary.regions.seribu}</SelectItem>
+                    <SelectItem value="All">{dictionary.regions.all}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>

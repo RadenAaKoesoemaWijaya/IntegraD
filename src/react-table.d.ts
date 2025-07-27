@@ -6,5 +6,6 @@ declare module '@tanstack/react-table' {
     addRow?: (newRow: Omit<TData, 'id'>) => void;
     updateRow?: (updatedRow: TData) => void;
     removeRow?: (id: string) => void;
+    dictionary?: any;
   }
 }

@@ -26,6 +26,9 @@ export function DataTableRowActions<TData>({
 }: DataTableRowActionsProps<TData>) {
   const { toast } = useToast();
   const healthData = row.original as HealthData;
+  const { dictionary } = row.table.options.meta as any;
+  const { admin: tAdmin, deleteDialog: tDelete } = dictionary;
+
 
   const onSave = (updatedData: HealthData | Omit<HealthData, 'id'>) => {
     if ('id' in updatedData) {
@@ -44,29 +47,29 @@ export function DataTableRowActions<TData>({
         variant="edit"
         initialData={healthData}
         onSave={onSave}
+        dictionary={dictionary}
       >
         <Button variant="outline" size="sm">
-          Edit
+          {tAdmin.edit}
         </Button>
       </DataEditorDialog>
       <AlertDialog>
         <AlertDialogTrigger asChild>
           <Button variant="destructive" size="sm">
-            Delete
+            {tAdmin.delete}
           </Button>
         </AlertDialogTrigger>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+            <AlertDialogTitle>{tDelete.title}</AlertDialogTitle>
             <AlertDialogDescription>
-              This action cannot be undone. This will permanently delete the
-              record.
+              {tDelete.description}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>{tDelete.cancel}</AlertDialogCancel>
             <AlertDialogAction onClick={onDelete}>
-              Continue
+              {tDelete.continue}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

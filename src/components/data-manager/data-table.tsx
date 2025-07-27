@@ -37,18 +37,21 @@ interface DataTableProps<TData extends HealthData, TValue> {
   data: TData[]
   meta: TableMeta<TData>,
   loading: boolean;
+  dictionary: any;
 }
 
 export function DataTable<TData extends HealthData, TValue>({
   columns,
   data,
   meta,
-  loading
+  loading,
+  dictionary
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = React.useState({})
+  const { dataManagement: t } = dictionary;
 
   const table = useReactTable({
     data,
@@ -80,7 +83,7 @@ export function DataTable<TData extends HealthData, TValue>({
       <div className="flex items-center justify-between">
         <div className="flex flex-1 items-center space-x-2">
           <Input
-            placeholder="Filter by region..."
+            placeholder={t.filterByRegion}
             value={(table.getColumn("region")?.getFilterValue() as string) ?? ""}
             onChange={(event) =>
               table.getColumn("region")?.setFilterValue(event.target.value)
@@ -90,7 +93,7 @@ export function DataTable<TData extends HealthData, TValue>({
           {table.getColumn("region") && (
             <DataTableFacetedFilter
               column={table.getColumn("region")}
-              title="Region"
+              title={t.region}
               options={uniqueRegions}
             />
           )}
@@ -99,13 +102,14 @@ export function DataTable<TData extends HealthData, TValue>({
             <DataEditorDialog
                 variant="add"
                 onSave={(newRow) => table.options.meta?.addRow?.(newRow)}
+                dictionary={dictionary}
             >
                 <Button variant="outline" size="sm" className="h-8">
                     <PlusCircle className="mr-2 h-4 w-4" />
-                    Add Record
+                    {t.addRecord}
                 </Button>
             </DataEditorDialog>
-            <DataTableViewOptions table={table} />
+            <DataTableViewOptions table={table} dictionary={dictionary} />
         </div>
       </div>
       <div className="rounded-md border">
@@ -134,7 +138,7 @@ export function DataTable<TData extends HealthData, TValue>({
                     <TableCell colSpan={columns.length} className="h-24 text-center">
                        <div className="flex justify-center items-center">
                          <Loader2 className="h-6 w-6 animate-spin text-primary mr-2" />
-                         <span>Loading data...</span>
+                         <span>{t.loadingData}</span>
                        </div>
                     </TableCell>
                 </TableRow>
@@ -160,7 +164,7 @@ export function DataTable<TData extends HealthData, TValue>({
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  No results.
+                  {t.noResults}
                 </TableCell>
               </TableRow>
             )}
@@ -174,7 +178,7 @@ export function DataTable<TData extends HealthData, TValue>({
           onClick={() => table.previousPage()}
           disabled={!table.getCanPreviousPage()}
         >
-          Previous
+          {t.previous}
         </Button>
         <Button
           variant="outline"
@@ -182,7 +186,7 @@ export function DataTable<TData extends HealthData, TValue>({
           onClick={() => table.nextPage()}
           disabled={!table.getCanNextPage()}
         >
-          Next
+          {t.next}
         </Button>
       </div>
     </div>

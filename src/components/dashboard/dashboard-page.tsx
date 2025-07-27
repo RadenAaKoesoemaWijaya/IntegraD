@@ -1,17 +1,17 @@
 'use client';
 
 import * as React from 'react';
-import { Bar, BarChart, Line, LineChart, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { BarChart, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
-import { Users, Stethoscope, Syringe, TrendingUp, Filter, FileDown, Bot, User, Settings, Search, Loader2 } from 'lucide-react';
-import { Logo } from './icons';
+import { Users, Stethoscope, Syringe, TrendingUp, Filter, FileDown, Search, Loader2 } from 'lucide-react';
 import { TrendDetector } from './trend-detector';
 import Link from 'next/link';
 import { getHealthData } from '@/lib/api';
 import { HealthData } from '../data-manager/schema';
+import { Header } from '../common/header';
 
 const chartConfig = {
   cases: { label: 'New Cases', color: 'hsl(var(--chart-1))' },
@@ -30,11 +30,26 @@ const aggregatedDataForAI = {
     ],
   };
 
-export function DashboardPage() {
+type DashboardPageProps = {
+    dictionary: any;
+    lang: string;
+};
+
+export function DashboardPage({ dictionary, lang }: DashboardPageProps) {
   const [allHealthData, setAllHealthData] = React.useState<HealthData[]>([]);
   const [loading, setLoading] = React.useState(true);
   const [region, setRegion] = React.useState('Jakarta Pusat');
   const [isClient, setIsClient] = React.useState(false);
+  const { dashboard: t, regions } = dictionary;
+  
+  const barChartConfig = {
+    cases: { label: t.totalCases, color: 'hsl(var(--chart-1))' },
+    vaccinations: { label: t.totalVaccinations, color: 'hsl(var(--chart-2))' },
+  } satisfies ChartConfig;
+
+  const lineChartConfig = {
+    patients: { label: t.activePatients, color: 'hsl(var(--chart-1))' }
+  } satisfies ChartConfig;
 
   React.useEffect(() => {
     setIsClient(true);
@@ -79,49 +94,7 @@ export function DashboardPage() {
 
   return (
     <div className="flex min-h-screen w-full flex-col">
-      <header className="sticky top-0 z-30 flex items-center gap-4 border-b bg-background/95 px-4 py-2 backdrop-blur-sm sm:px-6">
-        <div className="flex items-center gap-2">
-          <Logo className="h-8 w-8 text-primary" />
-          <h1 className="text-2xl font-semibold text-foreground">SehatData</h1>
-        </div>
-        <nav className="ml-4 hidden md:flex items-center gap-4 text-sm font-medium text-muted-foreground">
-            <Link href="/" className="text-primary font-semibold">Dashboard</Link>
-            <Link href="/upload" className="hover:text-foreground transition-colors">Data Management</Link>
-            <Link href="/search" className="hover:text-foreground transition-colors">Pencarian Data</Link>
-            <Link href="/profile" className="hover:text-foreground transition-colors">Profile</Link>
-            <Link href="/admin" className="hover:text-foreground transition-colors">Admin</Link>
-        </nav>
-        <div className="ml-auto flex items-center gap-2 no-print">
-          <div className="flex items-center gap-2">
-            <Filter className="h-4 w-4 text-muted-foreground" />
-            <Select value={region} onValueChange={setRegion} disabled={loading}>
-              <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Select Region" />
-              </SelectTrigger>
-              <SelectContent>
-                {uniqueRegions.map(r => <SelectItem key={r} value={r}>{r}</SelectItem>)}
-              </SelectContent>
-            </Select>
-          </div>
-          <TrendDetector aggregatedData={JSON.stringify(aggregatedDataForAI, null, 2)} />
-          <Button variant="outline" onClick={handlePrint}>
-            <FileDown className="mr-2 h-4 w-4" />
-            Export Report
-          </Button>
-          <Button variant="ghost" size="icon" asChild>
-            <Link href="/profile">
-              <User className="h-5 w-5" />
-              <span className="sr-only">Profile</span>
-            </Link>
-          </Button>
-          <Button variant="ghost" size="icon" asChild>
-            <Link href="/admin">
-              <Settings className="h-5 w-5" />
-              <span className="sr-only">Admin Settings</span>
-            </Link>
-          </Button>
-        </div>
-      </header>
+      <Header dictionary={dictionary} lang={lang} />
       <main className="flex-1 p-4 sm:p-6">
       {loading ? (
           <div className="flex justify-center items-center h-full">
@@ -132,99 +105,123 @@ export function DashboardPage() {
           <section>
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-xl font-semibold text-foreground/90">
-                  Health Overview: <span className="text-primary">{region}</span>
+                  {t.healthOverview}: <span className="text-primary">{region}</span>
               </h2>
               <Button asChild>
-                  <Link href="/search">
+                  <Link href={`/${lang}/search`}>
                       <Search className="mr-2 h-4 w-4" />
-                      Pencarian NIK
+                      {t.searchNIK}
                   </Link>
               </Button>
             </div>
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
               <Card>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">Total Cases (YTD)</CardTitle>
+                  <CardTitle className="text-sm font-medium">{t.totalCases}</CardTitle>
                   <Stethoscope className="h-4 w-4 text-muted-foreground" />
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold">{isClient ? kpiData.totalCases.toLocaleString() : '...'}</div>
                   <p className="text-xs text-muted-foreground">
-                    {isClient && kpiData.caseTrend !== 0 ? `${kpiData.caseTrend.toFixed(2)}% change` : 'No change data'}
+                    {isClient && kpiData.caseTrend !== 0 ? `${kpiData.caseTrend.toFixed(2)}% ${t.caseChange}` : t.basedOnCaseVolume}
                   </p>
                 </CardContent>
               </Card>
               <Card>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">Total Vaccinations</CardTitle>
+                  <CardTitle className="text-sm font-medium">{t.totalVaccinations}</CardTitle>
                   <Syringe className="h-4 w-4 text-muted-foreground" />
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold">{isClient ? kpiData.totalVaccinations.toLocaleString() : '...'}</div>
-                  <p className="text-xs text-muted-foreground">Year-to-date</p>
+                  <p className="text-xs text-muted-foreground">{t.ytd}</p>
                 </CardContent>
               </Card>
               <Card>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">Active Patients</CardTitle>
+                  <CardTitle className="text-sm font-medium">{t.activePatients}</CardTitle>
                   <Users className="h-4 w-4 text-muted-foreground" />
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold">{isClient ? kpiData.totalPatients.toLocaleString() : '...'}</div>
-                  <p className="text-xs text-muted-foreground">Current estimate</p>
+                  <p className="text-xs text-muted-foreground">{t.currentEstimate}</p>
                 </CardContent>
               </Card>
               <Card>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">Data Trend</CardTitle>
+                  <CardTitle className="text-sm font-medium">{t.dataTrend}</CardTitle>
                   <TrendingUp className="h-4 w-4 text-muted-foreground" />
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold">{kpiData.caseTrend > 0 ? 'Increasing' : (kpiData.caseTrend < 0 ? 'Decreasing' : 'Stable')}</div>
-                  <p className="text-xs text-muted-foreground">Based on case volume</p>
+                  <div className="text-2xl font-bold">{kpiData.caseTrend > 0 ? t.increasing : (kpiData.caseTrend < 0 ? t.decreasing : t.stable)}</div>
+                  <p className="text-xs text-muted-foreground">{t.basedOnCaseVolume}</p>
                 </CardContent>
               </Card>
             </div>
           </section>
 
           <section className="mt-6">
-            <h2 className="text-xl font-semibold text-foreground/90 mb-4">Monthly Trends</h2>
+            <div className="flex items-center justify-between mb-4">
+                <h2 className="text-xl font-semibold text-foreground/90">{t.monthlyTrends}</h2>
+                <div className="flex items-center gap-2 no-print">
+                    <div className="flex items-center gap-2">
+                        <Filter className="h-4 w-4 text-muted-foreground" />
+                        <Select value={region} onValueChange={setRegion} disabled={loading}>
+                        <SelectTrigger className="w-[180px]">
+                            <SelectValue placeholder={t.selectRegion} />
+                        </SelectTrigger>
+                        <SelectContent>
+                            {uniqueRegions.map(r => <SelectItem key={r} value={r}>{r}</SelectItem>)}
+                        </SelectContent>
+                        </Select>
+                    </div>
+                    <TrendDetector aggregatedData={JSON.stringify(aggregatedDataForAI, null, 2)} dictionary={dictionary} />
+                    <Button variant="outline" onClick={handlePrint}>
+                        <FileDown className="mr-2 h-4 w-4" />
+                        {t.exportReport}
+                    </Button>
+                </div>
+            </div>
             <div className="grid gap-6 lg:grid-cols-2">
               <Card>
                 <CardHeader>
-                  <CardTitle>Case and Vaccination Analysis</CardTitle>
-                  <CardDescription>Monthly new cases vs. vaccinations for {region}</CardDescription>
+                  <CardTitle>{t.caseVaccinationAnalysis}</CardTitle>
+                  <CardDescription>{t.caseVsVaccination} {region}</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <ChartContainer config={chartConfig} className="h-[300px] w-full">
-                    <BarChart data={filteredData} accessibilityLayer>
-                      <CartesianGrid vertical={false} />
-                      <XAxis dataKey="month" tickLine={false} tickMargin={10} axisLine={false} />
-                      <YAxis />
-                      <ChartTooltip content={<ChartTooltipContent />} />
-                      <Legend />
-                      <Bar dataKey="cases" fill="var(--color-cases)" radius={4} />
-                      <Bar dataKey="vaccinations" fill="var(--color-vaccinations)" radius={4} />
-                    </BarChart>
-                  </ChartContainer>
+                  <ResponsiveContainer width="100%" height={300}>
+                    <ChartContainer config={barChartConfig} className="h-[300px] w-full">
+                        <BarChart data={filteredData} accessibilityLayer>
+                          <CartesianGrid vertical={false} />
+                          <XAxis dataKey="month" tickLine={false} tickMargin={10} axisLine={false} />
+                          <YAxis />
+                          <ChartTooltip content={<ChartTooltipContent />} />
+                          <Legend />
+                          <recharts.Bar dataKey="cases" fill="var(--color-cases)" radius={4} name={barChartConfig.cases.label} />
+                          <recharts.Bar dataKey="vaccinations" fill="var(--color-vaccinations)" radius={4} name={barChartConfig.vaccinations.label} />
+                        </BarChart>
+                    </ChartContainer>
+                  </ResponsiveContainer>
                 </CardContent>
               </Card>
               <Card>
                 <CardHeader>
-                  <CardTitle>Patient Growth</CardTitle>
-                  <CardDescription>Total registered patients over time in {region}</CardDescription>
+                  <CardTitle>{t.patientGrowth}</CardTitle>
+                  <CardDescription>{t.patientGrowthDesc} {region}</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <ChartContainer config={{ patients: { label: 'Patients', color: 'hsl(var(--chart-1))' } }} className="h-[300px] w-full">
-                    <LineChart data={filteredData} accessibilityLayer margin={{ left: 12, right: 12 }}>
-                      <CartesianGrid vertical={false} />
-                      <XAxis dataKey="month" tickLine={false} tickMargin={10} axisLine={false} />
-                      <YAxis tickFormatter={(value) => (value / 1000) + 'k'} />
-                      <ChartTooltip content={<ChartTooltipContent />} />
-                      <Legend />
-                      <Line type="monotone" dataKey="patients" stroke="var(--color-patients)" strokeWidth={2} dot={false} />
-                    </LineChart>
-                  </ChartContainer>
+                  <ResponsiveContainer width="100%" height={300}>
+                    <ChartContainer config={lineChartConfig} className="h-[300px] w-full">
+                        <recharts.LineChart data={filteredData} accessibilityLayer margin={{ left: 12, right: 12 }}>
+                          <CartesianGrid vertical={false} />
+                          <XAxis dataKey="month" tickLine={false} tickMargin={10} axisLine={false} />
+                          <YAxis tickFormatter={(value) => (value / 1000) + 'k'} />
+                          <ChartTooltip content={<ChartTooltipContent />} />
+                          <Legend />
+                          <recharts.Line type="monotone" dataKey="patients" stroke="var(--color-patients)" strokeWidth={2} dot={false} name={lineChartConfig.patients.label} />
+                        </recharts.LineChart>
+                    </ChartContainer>
+                  </ResponsiveContainer>
                 </CardContent>
               </Card>
             </div>
