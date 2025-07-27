@@ -103,7 +103,6 @@ export function DataManagerPage({ dictionary, lang }: DataManagerPageProps) {
     addRow: handleAddRow,
     updateRow: handleUpdateRow,
     removeRow: handleRemoveRow,
-    dictionary,
   };
 
   return (

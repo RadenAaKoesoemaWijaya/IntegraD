@@ -70,7 +70,10 @@ export function DataTable<TData extends HealthData, TValue>({
       columnVisibility,
       rowSelection,
     },
-    meta,
+    meta: {
+      ...meta,
+      dictionary: dictionary, // Pass dictionary to table meta
+    },
   })
 
   const uniqueRegions = React.useMemo(() => {
@@ -101,7 +104,7 @@ export function DataTable<TData extends HealthData, TValue>({
         <div className="flex items-center space-x-2">
             <DataEditorDialog
                 variant="add"
-                onSave={(newRow) => table.options.meta?.addRow?.(newRow)}
+                onSave={(newRow) => table.options.meta?.addRow?.(newRow as any)}
                 dictionary={dictionary}
             >
                 <Button variant="outline" size="sm" className="h-8">

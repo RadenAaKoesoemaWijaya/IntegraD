@@ -26,7 +26,6 @@ export function DataTableRowActions<TData>({
   row,
   dictionary,
 }: DataTableRowActionsProps<TData>) {
-  const { toast } = useToast();
   const healthData = row.original as HealthData;
   const { admin: tAdmin, deleteDialog: tDelete } = dictionary;
 

@@ -1,5 +1,4 @@
 import { RowData } from '@tanstack/react-table';
-import { HealthData } from './components/data-manager/schema';
 
 declare module '@tanstack/react-table' {
   interface TableMeta<TData extends RowData> {
