@@ -12,6 +12,7 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
+  TableMeta,
 } from "@tanstack/react-table"
 
 import {
@@ -27,19 +28,22 @@ import { Input } from "@/components/ui/input"
 import { DataTableViewOptions } from "./data-table-view-options"
 import { HealthData } from "./schema"
 import { DataTableFacetedFilter } from "./data-table-faceted-filter"
-import { PlusCircle } from "lucide-react"
+import { Loader2, PlusCircle } from "lucide-react"
 import { DataEditorDialog } from "./data-editor-dialog"
 
-interface DataTableProps<TData, TValue> {
+
+interface DataTableProps<TData extends HealthData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
-  setData: React.Dispatch<React.SetStateAction<TData[]>>
+  meta: TableMeta<TData>,
+  loading: boolean;
 }
 
 export function DataTable<TData extends HealthData, TValue>({
   columns,
   data,
-  setData,
+  meta,
+  loading
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
@@ -63,30 +67,7 @@ export function DataTable<TData extends HealthData, TValue>({
       columnVisibility,
       rowSelection,
     },
-    meta: {
-        updateData: (rowIndex: number, columnId: string, value: any) => {
-            setData(old =>
-              old.map((row, index) => {
-                if (index === rowIndex) {
-                  return {
-                    ...old[rowIndex]!,
-                    [columnId]: value,
-                  }
-                }
-                return row
-              })
-            )
-          },
-          removeRow: (rowIndex: number) => {
-            setData(old => old.filter((_, index) => index !== rowIndex));
-          },
-          addRow: (newRow: TData) => {
-            setData(old => [...old, newRow]);
-          },
-          updateRow: (rowIndex: number, newRow: TData) => {
-            setData(old => old.map((row, index) => index === rowIndex ? newRow : row));
-          }
-    }
+    meta,
   })
 
   const uniqueRegions = React.useMemo(() => {
@@ -117,7 +98,7 @@ export function DataTable<TData extends HealthData, TValue>({
         <div className="flex items-center space-x-2">
             <DataEditorDialog
                 variant="add"
-                onSave={(newRow) => table.options.meta?.addRow?.(newRow as TData)}
+                onSave={(newRow) => table.options.meta?.addRow?.(newRow)}
             >
                 <Button variant="outline" size="sm" className="h-8">
                     <PlusCircle className="mr-2 h-4 w-4" />
@@ -148,7 +129,16 @@ export function DataTable<TData extends HealthData, TValue>({
             ))}
           </TableHeader>
           <TableBody>
-            {table.getRowModel().rows?.length ? (
+            {loading ? (
+                <TableRow>
+                    <TableCell colSpan={columns.length} className="h-24 text-center">
+                       <div className="flex justify-center items-center">
+                         <Loader2 className="h-6 w-6 animate-spin text-primary mr-2" />
+                         <span>Loading data...</span>
+                       </div>
+                    </TableCell>
+                </TableRow>
+            ) : table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}

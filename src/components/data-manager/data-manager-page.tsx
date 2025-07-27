@@ -6,19 +6,40 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Upload, FileDown, PlusCircle, User, Settings } from 'lucide-react';
+import { Upload, User, Settings } from 'lucide-react';
 import { DataTable } from './data-table';
 import { columns } from './columns';
-import { HealthData, initialHealthData, ProgramManager } from './schema';
+import { HealthData, ProgramManager } from './schema';
 import Link from 'next/link';
 import { Logo } from '../dashboard/icons';
 import { useToast } from '@/hooks/use-toast';
+import { getHealthData, addHealthData, updateHealthData, deleteHealthData } from '@/lib/api';
 
 export function DataManagerPage() {
-  const [data, setData] = React.useState<HealthData[]>(initialHealthData);
+  const [data, setData] = React.useState<HealthData[]>([]);
+  const [loading, setLoading] = React.useState(true);
   const [selectedManager, setSelectedManager] = React.useState<string>('seksi-p2p');
   const [file, setFile] = React.useState<File | null>(null);
   const { toast } = useToast();
+
+  React.useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        const result = await getHealthData();
+        setData(result);
+      } catch (error) {
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: "Failed to fetch data. Please try again later.",
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, [toast]);
 
   const programManagers: ProgramManager[] = [
     { id: 'seksi-p2p', name: 'Seksi Pencegahan dan Penanggulangan Penyakit' },
@@ -39,27 +60,45 @@ export function DataManagerPage() {
     // Mock file processing
     toast({
         title: "Upload Successful",
-        description: `File ${file.name} has been uploaded for ${programManagers.find(p => p.id === selectedManager)?.name}.`,
+        description: `File ${file.name} has been uploaded for ${programManagers.find(p => p.id === selectedManager)?.name}. Data will be processed and reflected shortly.`,
       });
-    // In a real app, you would parse the CSV/JSON and update the state
-    // For now, we'll just show a success message.
+    // In a real app, you would parse the CSV/JSON, call the API, and then refresh the data.
   };
 
-  const handleExport = () => {
-    // Mock data export
-    const csvContent = "data:text/csv;charset=utf-8," 
-        + "id,region,month,cases,vaccinations,patients\n"
-        + data.map(e => `${e.id},${e.region},${e.month},${e.cases},${e.vaccinations},${e.patients}`).join("\n");
-    const encodedUri = encodeURI(csvContent);
-    const link = document.createElement("a");
-    link.setAttribute("href", encodedUri);
-    link.setAttribute("download", "health_data.csv");
-    document.body.appendChild(link);
-    link.click();
-    toast({
-        title: "Export Successful",
-        description: "Data has been exported to CSV.",
-      });
+  const handleAddRow = async (newRow: Omit<HealthData, 'id'>) => {
+    try {
+      const addedRow = await addHealthData(newRow);
+      setData(prev => [...prev, addedRow]);
+      toast({ title: 'Success', description: 'Record added successfully.' });
+    } catch (error) {
+      toast({ variant: 'destructive', title: 'Error', description: 'Failed to add record.' });
+    }
+  };
+
+  const handleUpdateRow = async (updatedRow: HealthData) => {
+    try {
+      const returnedRow = await updateHealthData(updatedRow);
+      setData(prev => prev.map(row => (row.id === returnedRow.id ? returnedRow : row)));
+      toast({ title: 'Success', description: 'Record updated successfully.' });
+    } catch (error) {
+      toast({ variant: 'destructive', title: 'Error', description: 'Failed to update record.' });
+    }
+  };
+
+  const handleRemoveRow = async (id: string) => {
+    try {
+      await deleteHealthData(id);
+      setData(prev => prev.filter(row => row.id !== id));
+      toast({ title: 'Success', description: 'Record deleted successfully.' });
+    } catch (error) {
+      toast({ variant: 'destructive', title: 'Error', description: 'Failed to delete record.' });
+    }
+  };
+  
+  const tableMeta = {
+    addRow: handleAddRow,
+    updateRow: handleUpdateRow,
+    removeRow: handleRemoveRow,
   };
 
   return (
@@ -132,7 +171,7 @@ export function DataManagerPage() {
               <CardDescription>Lihat, tambah, edit, atau hapus data dalam dataset.</CardDescription>
             </CardHeader>
             <CardContent>
-              <DataTable columns={columns} data={data} setData={setData} />
+              <DataTable columns={columns} data={data} meta={tableMeta} loading={loading} />
             </CardContent>
           </Card>
         </div>

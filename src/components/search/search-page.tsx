@@ -10,23 +10,16 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { User, Settings, Search, Loader2, AlertTriangle, FileText } from 'lucide-react';
 import { Logo } from '../dashboard/icons';
 import { useToast } from '@/hooks/use-toast';
-import { HealthData } from '../data-manager/schema';
 import { Alert, AlertDescription, AlertTitle } from '../ui/alert';
+import { searchNik } from '@/lib/api';
 
-const mockDatasets = [
-    { id: 'seksi-p2p', name: 'Seksi Pencegahan dan Penanggulangan Penyakit', data: [
-        { id: 'rec-001', nik: '3171234567890001', name: 'Budi Santoso', address: 'Jl. Merdeka No. 1, Jakarta' },
-        { id: 'rec-002', nik: '3171234567890002', name: 'Citra Lestari', address: 'Jl. Pahlawan No. 10, Jakarta' },
-    ]},
-    { id: 'seksi-sdk', name: 'Seksi Sumber Daya Kesehatan', data: [
-        { id: 'rec-003', nik: '3273123456789001', name: 'Agus Wijaya', address: 'Jl. Asia Afrika No. 5, Bandung' },
-    ]},
-    { id: 'seksi-kesmas', name: 'Seksi Kesehatan Masyarakat', data: [
-        { id: 'rec-004', nik: '3171234567890001', name: 'Budi Santoso', address: 'Jl. Merdeka No. 1, Jakarta (Pusat)' },
-    ]},
+const mockDatasetInfo = [
+    { id: 'seksi-p2p', name: 'Seksi Pencegahan dan Penanggulangan Penyakit' },
+    { id: 'seksi-sdk', name: 'Seksi Sumber Daya Kesehatan' },
+    { id: 'seksi-kesmas', name: 'Seksi Kesehatan Masyarakat' },
 ];
 
-type SearchResult = {
+export type SearchResult = {
     datasetName: string;
     record: { id: string; nik: string; name: string; address: string };
 };
@@ -38,6 +31,7 @@ export function SearchPage() {
     const [isLoading, setIsLoading] = React.useState(false);
     const [results, setResults] = React.useState<SearchResult[]>([]);
     const [error, setError] = React.useState<string | null>(null);
+    const [searchAttempted, setSearchAttempted] = React.useState(false);
 
     const handleSearch = async () => {
         if (!nik) {
@@ -52,26 +46,17 @@ export function SearchPage() {
         setIsLoading(true);
         setError(null);
         setResults([]);
-
-        // Simulate API call
-        await new Promise(resolve => setTimeout(resolve, 1500));
+        setSearchAttempted(true);
 
         try {
-            const foundResults: SearchResult[] = [];
-            mockDatasets.forEach(dataset => {
-                if (selectedDatasets.includes(dataset.id)) {
-                    const foundRecord = dataset.data.find(record => record.nik === nik);
-                    if (foundRecord) {
-                        foundResults.push({ datasetName: dataset.name, record: foundRecord });
-                    }
-                }
-            });
+            const foundResults = await searchNik(nik, selectedDatasets);
             setResults(foundResults);
             if (foundResults.length === 0) {
                 toast({ title: 'Tidak Ditemukan', description: 'Tidak ada data yang cocok dengan NIK yang diberikan.' });
             }
         } catch (e: any) {
             setError(e.message || 'Terjadi kesalahan tak terduga.');
+            toast({ variant: 'destructive', title: 'Pencarian Gagal', description: error });
         } finally {
             setIsLoading(false);
         }
@@ -130,7 +115,7 @@ export function SearchPage() {
                             <div className="space-y-2">
                                 <Label>Pilih Dataset</Label>
                                 <div className="space-y-2 rounded-md border p-4">
-                                    {mockDatasets.map(dataset => (
+                                    {mockDatasetInfo.map(dataset => (
                                         <div key={dataset.id} className="flex items-center space-x-2">
                                             <Checkbox 
                                                 id={dataset.id} 
@@ -164,7 +149,7 @@ export function SearchPage() {
                         </Alert>
                     )}
 
-                    {results.length > 0 && (
+                    {searchAttempted && !isLoading && results.length > 0 && (
                         <Card>
                             <CardHeader>
                                 <CardTitle>Hasil Pencarian untuk NIK: {nik}</CardTitle>
@@ -193,6 +178,17 @@ export function SearchPage() {
                                         </div>
                                     </div>
                                 ))}
+                            </CardContent>
+                        </Card>
+                    )}
+
+                    {searchAttempted && !isLoading && results.length === 0 && (
+                         <Card>
+                            <CardHeader>
+                                <CardTitle>Hasil Pencarian untuk NIK: {nik}</CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                                <p>Data tidak ditemukan.</p>
                             </CardContent>
                         </Card>
                     )}

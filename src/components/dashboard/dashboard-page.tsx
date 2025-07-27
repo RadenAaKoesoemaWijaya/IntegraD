@@ -6,37 +6,12 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
-import { Users, Stethoscope, Syringe, TrendingUp, Filter, FileDown, Bot, Upload, User, Settings, Search } from 'lucide-react';
+import { Users, Stethoscope, Syringe, TrendingUp, Filter, FileDown, Bot, User, Settings, Search, Loader2 } from 'lucide-react';
 import { Logo } from './icons';
 import { TrendDetector } from './trend-detector';
 import Link from 'next/link';
-
-const allHealthData = [
-  { region: 'Jakarta Pusat', month: 'Jan', cases: 1200, vaccinations: 800, patients: 22000 },
-  { region: 'Jakarta Pusat', month: 'Feb', cases: 1500, vaccinations: 950, patients: 23500 },
-  { region: 'Jakarta Pusat', month: 'Mar', cases: 1300, vaccinations: 1100, patients: 24000 },
-  { region: 'Jakarta Pusat', month: 'Apr', cases: 1700, vaccinations: 1250, patients: 25500 },
-  { region: 'Jakarta Pusat', month: 'May', cases: 1600, vaccinations: 1400, patients: 26000 },
-  { region: 'Jakarta Pusat', month: 'Jun', cases: 1900, vaccinations: 1550, patients: 27500 },
-  { region: 'Jakarta Barat', month: 'Jan', cases: 800, vaccinations: 600, patients: 15000 },
-  { region: 'Jakarta Barat', month: 'Feb', cases: 950, vaccinations: 700, patients: 16000 },
-  { region: 'Jakarta Barat', month: 'Mar', cases: 850, vaccinations: 750, patients: 16500 },
-  { region: 'Jakarta Barat', month: 'Apr', cases: 1100, vaccinations: 850, patients: 17500 },
-  { region: 'Jakarta Barat', month: 'May', cases: 1000, vaccinations: 950, patients: 18000 },
-  { region: 'Jakarta Barat', month: 'Jun', cases: 1200, vaccinations: 1100, patients: 19000 },
-  { region: 'Jakarta Selatan', month: 'Jan', cases: 1000, vaccinations: 700, patients: 18000 },
-  { region: 'Jakarta Selatan', month: 'Feb', cases: 1100, vaccinations: 800, patients: 19000 },
-  { region: 'Jakarta Selatan', month: 'Mar', cases: 950, vaccinations: 900, patients: 19500 },
-  { region: 'Jakarta Selatan', month: 'Apr', cases: 1300, vaccinations: 1000, patients: 21000 },
-  { region: 'Jakarta Selatan', month: 'May', cases: 1250, vaccinations: 1150, patients: 22000 },
-  { region: 'Jakarta Selatan', month: 'Jun', cases: 1400, vaccinations: 1300, patients: 23000 },
-  { region: 'Jakarta Timur', month: 'Jan', cases: 900, vaccinations: 650, patients: 17000 },
-  { region: 'Jakarta Timur', month: 'Feb', cases: 1000, vaccinations: 750, patients: 18000 },
-  { region: 'Jakarta Utara', month: 'Jan', cases: 700, vaccinations: 500, patients: 14000 },
-  { region: 'Jakarta Utara', month: 'Feb', cases: 850, vaccinations: 600, patients: 15000 },
-  { region: 'Kepulauan Seribu', month: 'Jan', cases: 50, vaccinations: 30, patients: 1000 },
-  { region: 'Kepulauan Seribu', month: 'Feb', cases: 60, vaccinations: 40, patients: 1100 },
-];
+import { getHealthData } from '@/lib/api';
+import { HealthData } from '../data-manager/schema';
 
 const chartConfig = {
   cases: { label: 'New Cases', color: 'hsl(var(--chart-1))' },
@@ -56,16 +31,30 @@ const aggregatedDataForAI = {
   };
 
 export function DashboardPage() {
+  const [allHealthData, setAllHealthData] = React.useState<HealthData[]>([]);
+  const [loading, setLoading] = React.useState(true);
   const [region, setRegion] = React.useState('Jakarta Pusat');
   const [isClient, setIsClient] = React.useState(false);
 
   React.useEffect(() => {
     setIsClient(true);
+    const fetchData = async () => {
+        try {
+            setLoading(true);
+            const data = await getHealthData();
+            setAllHealthData(data);
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setLoading(false);
+        }
+    }
+    fetchData();
   }, []);
 
   const filteredData = React.useMemo(() => {
     return allHealthData.filter((d) => d.region === region);
-  }, [region]);
+  }, [region, allHealthData]);
 
   const kpiData = React.useMemo(() => {
     const data = filteredData;
@@ -75,13 +64,18 @@ export function DashboardPage() {
     const totalCases = data.reduce((acc, item) => acc + item.cases, 0);
     const totalVaccinations = data.reduce((acc, item) => acc + item.vaccinations, 0);
     const totalPatients = data[data.length - 1]?.patients || 0;
-    const caseTrend = ((data[data.length - 1]?.cases - data[0]?.cases) / data[0]?.cases) * 100;
+    const caseTrend = data.length > 1 ? ((data[data.length - 1]?.cases - data[0]?.cases) / data[0]?.cases) * 100 : 0;
     return { totalCases, totalVaccinations, totalPatients, caseTrend };
   }, [filteredData]);
 
   const handlePrint = () => {
     window.print();
   };
+  
+  const uniqueRegions = React.useMemo(() => {
+    return [...new Set(allHealthData.map(d => d.region))];
+  }, [allHealthData]);
+
 
   return (
     <div className="flex min-h-screen w-full flex-col">
@@ -100,17 +94,12 @@ export function DashboardPage() {
         <div className="ml-auto flex items-center gap-2 no-print">
           <div className="flex items-center gap-2">
             <Filter className="h-4 w-4 text-muted-foreground" />
-            <Select value={region} onValueChange={setRegion}>
+            <Select value={region} onValueChange={setRegion} disabled={loading}>
               <SelectTrigger className="w-[180px]">
                 <SelectValue placeholder="Select Region" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="Jakarta Pusat">Jakarta Pusat</SelectItem>
-                <SelectItem value="Jakarta Utara">Jakarta Utara</SelectItem>
-                <SelectItem value="Jakarta Barat">Jakarta Barat</SelectItem>
-                <SelectItem value="Jakarta Selatan">Jakarta Selatan</SelectItem>
-                <SelectItem value="Jakarta Timur">Jakarta Timur</SelectItem>
-                <SelectItem value="Kepulauan Seribu">Kepulauan Seribu</SelectItem>
+                {uniqueRegions.map(r => <SelectItem key={r} value={r}>{r}</SelectItem>)}
               </SelectContent>
             </Select>
           </div>
@@ -134,106 +123,114 @@ export function DashboardPage() {
         </div>
       </header>
       <main className="flex-1 p-4 sm:p-6">
-        <section>
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-xl font-semibold text-foreground/90">
-                Health Overview: <span className="text-primary">{region}</span>
-            </h2>
-            <Button asChild>
-                <Link href="/search">
-                    <Search className="mr-2 h-4 w-4" />
-                    Pencarian NIK
-                </Link>
-            </Button>
+      {loading ? (
+          <div className="flex justify-center items-center h-full">
+            <Loader2 className="h-12 w-12 animate-spin text-primary" />
           </div>
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Total Cases (Last 6 Mo.)</CardTitle>
-                <Stethoscope className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{isClient ? kpiData.totalCases.toLocaleString() : kpiData.totalCases}</div>
-                <p className="text-xs text-muted-foreground">
-                  {isClient ? `${kpiData.caseTrend.toFixed(2)}% change` : ''}
-                </p>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Total Vaccinations</CardTitle>
-                <Syringe className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{isClient ? kpiData.totalVaccinations.toLocaleString() : kpiData.totalVaccinations}</div>
-                <p className="text-xs text-muted-foreground">Last 6 months</p>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Active Patients</CardTitle>
-                <Users className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{isClient ? kpiData.totalPatients.toLocaleString() : kpiData.totalPatients}</div>
-                <p className="text-xs text-muted-foreground">Current estimate</p>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Data Trend</CardTitle>
-                <TrendingUp className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{kpiData.caseTrend > 0 ? 'Increasing' : 'Decreasing'}</div>
-                <p className="text-xs text-muted-foreground">Based on case volume</p>
-              </CardContent>
-            </Card>
-          </div>
-        </section>
+        ) : (
+        <>
+          <section>
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-semibold text-foreground/90">
+                  Health Overview: <span className="text-primary">{region}</span>
+              </h2>
+              <Button asChild>
+                  <Link href="/search">
+                      <Search className="mr-2 h-4 w-4" />
+                      Pencarian NIK
+                  </Link>
+              </Button>
+            </div>
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+              <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium">Total Cases (YTD)</CardTitle>
+                  <Stethoscope className="h-4 w-4 text-muted-foreground" />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold">{isClient ? kpiData.totalCases.toLocaleString() : '...'}</div>
+                  <p className="text-xs text-muted-foreground">
+                    {isClient && kpiData.caseTrend !== 0 ? `${kpiData.caseTrend.toFixed(2)}% change` : 'No change data'}
+                  </p>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium">Total Vaccinations</CardTitle>
+                  <Syringe className="h-4 w-4 text-muted-foreground" />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold">{isClient ? kpiData.totalVaccinations.toLocaleString() : '...'}</div>
+                  <p className="text-xs text-muted-foreground">Year-to-date</p>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium">Active Patients</CardTitle>
+                  <Users className="h-4 w-4 text-muted-foreground" />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold">{isClient ? kpiData.totalPatients.toLocaleString() : '...'}</div>
+                  <p className="text-xs text-muted-foreground">Current estimate</p>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium">Data Trend</CardTitle>
+                  <TrendingUp className="h-4 w-4 text-muted-foreground" />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold">{kpiData.caseTrend > 0 ? 'Increasing' : (kpiData.caseTrend < 0 ? 'Decreasing' : 'Stable')}</div>
+                  <p className="text-xs text-muted-foreground">Based on case volume</p>
+                </CardContent>
+              </Card>
+            </div>
+          </section>
 
-        <section className="mt-6">
-          <h2 className="text-xl font-semibold text-foreground/90 mb-4">Monthly Trends</h2>
-          <div className="grid gap-6 lg:grid-cols-2">
-            <Card>
-              <CardHeader>
-                <CardTitle>Case and Vaccination Analysis</CardTitle>
-                <CardDescription>Monthly new cases vs. vaccinations for {region}</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <ChartContainer config={chartConfig} className="h-[300px] w-full">
-                  <BarChart data={filteredData} accessibilityLayer>
-                    <CartesianGrid vertical={false} />
-                    <XAxis dataKey="month" tickLine={false} tickMargin={10} axisLine={false} />
-                    <YAxis />
-                    <ChartTooltip content={<ChartTooltipContent />} />
-                    <Legend />
-                    <Bar dataKey="cases" fill="var(--color-cases)" radius={4} />
-                    <Bar dataKey="vaccinations" fill="var(--color-vaccinations)" radius={4} />
-                  </BarChart>
-                </ChartContainer>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader>
-                <CardTitle>Patient Growth</CardTitle>
-                <CardDescription>Total registered patients over time in {region}</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <ChartContainer config={{ patients: { label: 'Patients', color: 'hsl(var(--chart-1))' } }} className="h-[300px] w-full">
-                  <LineChart data={filteredData} accessibilityLayer margin={{ left: 12, right: 12 }}>
-                    <CartesianGrid vertical={false} />
-                    <XAxis dataKey="month" tickLine={false} tickMargin={10} axisLine={false} />
-                    <YAxis tickFormatter={(value) => (value / 1000) + 'k'} />
-                    <ChartTooltip content={<ChartTooltipContent />} />
-                    <Legend />
-                    <Line type="monotone" dataKey="patients" stroke="var(--color-patients)" strokeWidth={2} dot={false} />
-                  </LineChart>
-                </ChartContainer>
-              </CardContent>
-            </Card>
-          </div>
-        </section>
+          <section className="mt-6">
+            <h2 className="text-xl font-semibold text-foreground/90 mb-4">Monthly Trends</h2>
+            <div className="grid gap-6 lg:grid-cols-2">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Case and Vaccination Analysis</CardTitle>
+                  <CardDescription>Monthly new cases vs. vaccinations for {region}</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <ChartContainer config={chartConfig} className="h-[300px] w-full">
+                    <BarChart data={filteredData} accessibilityLayer>
+                      <CartesianGrid vertical={false} />
+                      <XAxis dataKey="month" tickLine={false} tickMargin={10} axisLine={false} />
+                      <YAxis />
+                      <ChartTooltip content={<ChartTooltipContent />} />
+                      <Legend />
+                      <Bar dataKey="cases" fill="var(--color-cases)" radius={4} />
+                      <Bar dataKey="vaccinations" fill="var(--color-vaccinations)" radius={4} />
+                    </BarChart>
+                  </ChartContainer>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader>
+                  <CardTitle>Patient Growth</CardTitle>
+                  <CardDescription>Total registered patients over time in {region}</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <ChartContainer config={{ patients: { label: 'Patients', color: 'hsl(var(--chart-1))' } }} className="h-[300px] w-full">
+                    <LineChart data={filteredData} accessibilityLayer margin={{ left: 12, right: 12 }}>
+                      <CartesianGrid vertical={false} />
+                      <XAxis dataKey="month" tickLine={false} tickMargin={10} axisLine={false} />
+                      <YAxis tickFormatter={(value) => (value / 1000) + 'k'} />
+                      <ChartTooltip content={<ChartTooltipContent />} />
+                      <Legend />
+                      <Line type="monotone" dataKey="patients" stroke="var(--color-patients)" strokeWidth={2} dot={false} />
+                    </LineChart>
+                  </ChartContainer>
+                </CardContent>
+              </Card>
+            </div>
+          </section>
+        </>
+      )}
       </main>
     </div>
   );

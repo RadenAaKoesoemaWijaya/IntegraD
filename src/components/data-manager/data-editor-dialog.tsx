@@ -21,11 +21,20 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 type DataEditorDialogProps = {
   children: React.ReactNode;
   variant: 'add' | 'edit';
-  initialData?: HealthData;
-  onSave: (data: HealthData) => void;
+  initialData?: Omit<HealthData, 'id'> | HealthData;
+  onSave: (data: Omit<HealthData, 'id'> | HealthData) => void;
 };
 
 const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'] as const;
+
+const formSchema = z.object({
+  region: z.string().min(1, { message: 'Region is required.' }),
+  month: z.enum(months),
+  cases: z.coerce.number().int().positive(),
+  vaccinations: z.coerce.number().int().positive(),
+  patients: z.coerce.number().int().positive(),
+});
+
 
 export function DataEditorDialog({ children, variant, initialData, onSave }: DataEditorDialogProps) {
   const [open, setOpen] = React.useState(false);
@@ -35,10 +44,9 @@ export function DataEditorDialog({ children, variant, initialData, onSave }: Dat
     control,
     reset,
     formState: { errors },
-  } = useForm<HealthData>({
-    resolver: zodResolver(healthDataSchema),
+  } = useForm<Omit<HealthData, 'id'>>({
+    resolver: zodResolver(formSchema),
     defaultValues: initialData || {
-      id: crypto.randomUUID(),
       region: '',
       month: 'Jan',
       cases: 0,
@@ -50,7 +58,6 @@ export function DataEditorDialog({ children, variant, initialData, onSave }: Dat
   React.useEffect(() => {
     if (open) {
       reset(initialData || {
-        id: crypto.randomUUID(),
         region: '',
         month: 'Jan',
         cases: 0,
@@ -60,8 +67,12 @@ export function DataEditorDialog({ children, variant, initialData, onSave }: Dat
     }
   }, [open, initialData, reset]);
 
-  const onSubmit = (data: HealthData) => {
-    onSave(data);
+  const onSubmit = (data: Omit<HealthData, 'id'>) => {
+    if (variant === 'edit' && initialData && 'id' in initialData) {
+      onSave({ ...data, id: initialData.id });
+    } else {
+      onSave(data);
+    }
     setOpen(false);
   };
 
@@ -80,7 +91,7 @@ export function DataEditorDialog({ children, variant, initialData, onSave }: Dat
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="region" className="text-right">Region</Label>
               <Input id="region" {...register('region')} className="col-span-3" />
-              {errors.region && <p className="col-span-4 text-red-500 text-xs">{errors.region.message}</p>}
+              {errors.region && <p className="col-span-4 text-right text-red-500 text-xs">{errors.region.message}</p>}
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="month" className="text-right">Month</Label>
@@ -98,22 +109,22 @@ export function DataEditorDialog({ children, variant, initialData, onSave }: Dat
                     </Select>
                 )}
               />
-              {errors.month && <p className="col-span-4 text-red-500 text-xs">{errors.month.message}</p>}
+              {errors.month && <p className="col-span-4 text-right text-red-500 text-xs">{errors.month.message}</p>}
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="cases" className="text-right">Cases</Label>
-              <Input id="cases" type="number" {...register('cases', { valueAsNumber: true })} className="col-span-3" />
-              {errors.cases && <p className="col-span-4 text-red-500 text-xs">{errors.cases.message}</p>}
+              <Input id="cases" type="number" {...register('cases')} className="col-span-3" />
+              {errors.cases && <p className="col-span-4 text-right text-red-500 text-xs">{errors.cases.message}</p>}
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="vaccinations" className="text-right">Vaccinations</Label>
-              <Input id="vaccinations" type="number" {...register('vaccinations', { valueAsNumber: true })} className="col-span-3" />
-              {errors.vaccinations && <p className="col-span-4 text-red-500 text-xs">{errors.vaccinations.message}</p>}
+              <Input id="vaccinations" type="number" {...register('vaccinations')} className="col-span-3" />
+              {errors.vaccinations && <p className="col-span-4 text-right text-red-500 text-xs">{errors.vaccinations.message}</p>}
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="patients" className="text-right">Patients</Label>
-              <Input id="patients" type="number" {...register('patients', { valueAsNumber: true })} className="col-span-3" />
-              {errors.patients && <p className="col-span-4 text-red-500 text-xs">{errors.patients.message}</p>}
+              <Input id="patients" type="number" {...register('patients')} className="col-span-3" />
+              {errors.patients && <p className="col-span-4 text-right text-red-500 text-xs">{errors.patients.message}</p>}
             </div>
           </div>
           <DialogFooter>

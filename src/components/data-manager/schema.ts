@@ -17,11 +17,3 @@ export const programManagerSchema = z.object({
 });
 
 export type ProgramManager = z.infer<typeof programManagerSchema>;
-
-
-export const initialHealthData: HealthData[] = [
-    { id: crypto.randomUUID(), region: 'Jakarta Pusat', month: 'Jan', cases: 1200, vaccinations: 800, patients: 22000 },
-    { id: crypto.randomUUID(), region: 'Jakarta Pusat', month: 'Feb', cases: 1500, vaccinations: 950, patients: 23500 },
-    { id: crypto.randomUUID(), region: 'Jakarta Barat', month: 'Mar', cases: 850, vaccinations: 750, patients: 16500 },
-    { id: crypto.randomUUID(), region: 'Jakarta Selatan', month: 'Apr', cases: 1300, vaccinations: 1000, patients: 21000 },
-];
