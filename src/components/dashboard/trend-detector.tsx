@@ -19,14 +19,14 @@ import { Separator } from '../ui/separator';
 type TrendDetectorProps = {
   aggregatedData: string;
   dictionary: any;
+  buttonText: string;
 };
 
-export function TrendDetector({ aggregatedData, dictionary }: TrendDetectorProps) {
+export function TrendDetector({ aggregatedData, dictionary: t, buttonText }: TrendDetectorProps) {
   const [open, setOpen] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
   const [result, setResult] = React.useState<DetectHealthTrendsOutput | null>(null);
   const [error, setError] = React.useState<string | null>(null);
-  const { trendDetector: t } = dictionary;
 
   const handleAnalyze = async () => {
     setIsLoading(true);
@@ -47,7 +47,7 @@ export function TrendDetector({ aggregatedData, dictionary }: TrendDetectorProps
       <DialogTrigger asChild>
         <Button>
           <Bot className="mr-2 h-4 w-4" />
-          {dictionary.dashboard.detectTrends}
+          {buttonText}
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[600px]">

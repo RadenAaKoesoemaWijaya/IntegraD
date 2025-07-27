@@ -10,7 +10,7 @@
     "dashboard": {
         "title": "Dashboard",
         "healthOverview": "Health Overview",
-        "searchNIK": "NIK Search",
+        "searchNIK": "Data Search",
         "totalCases": "Total Cases (YTD)",
         "caseChange": "change",
         "totalVaccinations": "Total Vaccinations",

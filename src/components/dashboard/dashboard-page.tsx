@@ -176,7 +176,7 @@ export function DashboardPage({ dictionary, lang }: DashboardPageProps) {
                         </SelectContent>
                         </Select>
                     </div>
-                    <TrendDetector aggregatedData={JSON.stringify(aggregatedDataForAI, null, 2)} dictionary={dictionary} />
+                    <TrendDetector aggregatedData={JSON.stringify(aggregatedDataForAI, null, 2)} dictionary={dictionary.trendDetector} buttonText={dictionary.dashboard.detectTrends} />
                     <Button variant="outline" onClick={handlePrint}>
                         <FileDown className="mr-2 h-4 w-4" />
                         {t.exportReport}

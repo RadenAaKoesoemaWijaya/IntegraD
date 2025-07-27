@@ -10,7 +10,7 @@
     "dashboard": {
         "title": "Dasbor",
         "healthOverview": "Gambaran Kesehatan",
-        "searchNIK": "Pencarian NIK",
+        "searchNIK": "Pencarian Data",
         "totalCases": "Total Kasus (YTD)",
         "caseChange": "perubahan",
         "totalVaccinations": "Total Vaksinasi",
