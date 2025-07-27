@@ -19,14 +19,15 @@ import { useToast } from '@/hooks/use-toast';
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>;
+  dictionary: any;
 }
 
 export function DataTableRowActions<TData>({
   row,
+  dictionary,
 }: DataTableRowActionsProps<TData>) {
   const { toast } = useToast();
   const healthData = row.original as HealthData;
-  const { dictionary } = row.table.options.meta as any;
   const { admin: tAdmin, deleteDialog: tDelete } = dictionary;
 
 
