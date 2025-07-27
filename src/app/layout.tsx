@@ -6,24 +6,18 @@ import { i18n } from '@/i18n-config';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-body' });
 
-export function generateStaticParams() {
-  return i18n.locales.map((locale) => ({ lang: locale }))
-}
-
 export const metadata = {
   title: 'IntegraD',
   description: 'Integrasi dan Analisis Big Data Kesehatan',
 };
 
 export default function RootLayout({
-  children,
-  params,
+  children
 }: Readonly<{
   children: React.ReactNode;
-  params: { lang: string };
 }>) {
   return (
-    <html lang={params.lang} suppressHydrationWarning>
+    <html lang="id" suppressHydrationWarning>
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />

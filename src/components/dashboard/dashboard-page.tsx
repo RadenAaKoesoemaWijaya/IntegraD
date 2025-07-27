@@ -1,7 +1,8 @@
+
 'use client';
 
 import * as React from 'react';
-import { BarChart, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -197,8 +198,8 @@ export function DashboardPage({ dictionary, lang }: DashboardPageProps) {
                           <YAxis />
                           <ChartTooltip content={<ChartTooltipContent />} />
                           <Legend />
-                          <recharts.Bar dataKey="cases" fill="var(--color-cases)" radius={4} name={barChartConfig.cases.label} />
-                          <recharts.Bar dataKey="vaccinations" fill="var(--color-vaccinations)" radius={4} name={barChartConfig.vaccinations.label} />
+                          <Bar dataKey="cases" fill="var(--color-cases)" radius={4} name={barChartConfig.cases.label} />
+                          <Bar dataKey="vaccinations" fill="var(--color-vaccinations)" radius={4} name={barChartConfig.vaccinations.label} />
                         </BarChart>
                     </ChartContainer>
                   </ResponsiveContainer>
@@ -212,14 +213,14 @@ export function DashboardPage({ dictionary, lang }: DashboardPageProps) {
                 <CardContent>
                   <ResponsiveContainer width="100%" height={300}>
                     <ChartContainer config={lineChartConfig} className="h-[300px] w-full">
-                        <recharts.LineChart data={filteredData} accessibilityLayer margin={{ left: 12, right: 12 }}>
+                        <LineChart data={filteredData} accessibilityLayer margin={{ left: 12, right: 12 }}>
                           <CartesianGrid vertical={false} />
                           <XAxis dataKey="month" tickLine={false} tickMargin={10} axisLine={false} />
                           <YAxis tickFormatter={(value) => (value / 1000) + 'k'} />
                           <ChartTooltip content={<ChartTooltipContent />} />
                           <Legend />
-                          <recharts.Line type="monotone" dataKey="patients" stroke="var(--color-patients)" strokeWidth={2} dot={false} name={lineChartConfig.patients.label} />
-                        </recharts.LineChart>
+                          <Line type="monotone" dataKey="patients" stroke="var(--color-patients)" strokeWidth={2} dot={false} name={lineChartConfig.patients.label} />
+                        </LineChart>
                     </ChartContainer>
                   </ResponsiveContainer>
                 </CardContent>
