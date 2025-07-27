@@ -80,7 +80,7 @@ export function SearchPage() {
                 <nav className="ml-4 hidden md:flex items-center gap-4 text-sm font-medium text-muted-foreground">
                     <Link href="/" className="hover:text-foreground transition-colors">Dashboard</Link>
                     <Link href="/upload" className="hover:text-foreground transition-colors">Data Management</Link>
-                    <Link href="/search" className="text-primary font-semibold">NIK Search</Link>
+                    <Link href="/search" className="text-primary font-semibold">Pencarian Data</Link>
                     <Link href="/profile" className="hover:text-foreground transition-colors">Profile</Link>
                     <Link href="/admin" className="hover:text-foreground transition-colors">Admin</Link>
                 </nav>
@@ -101,7 +101,7 @@ export function SearchPage() {
             </header>
             <main className="flex-1 p-4 sm:p-6">
                 <div className="mx-auto max-w-4xl space-y-6">
-                    <h2 className="text-2xl font-semibold text-foreground/90">Pencarian NIK</h2>
+                    <h2 className="text-2xl font-semibold text-foreground/90">Pencarian Data</h2>
                     <Card>
                         <CardHeader>
                             <CardTitle>Cari Data Pasien berdasarkan NIK</CardTitle>
