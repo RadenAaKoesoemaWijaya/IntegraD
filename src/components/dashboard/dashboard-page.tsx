@@ -13,6 +13,7 @@ import Link from 'next/link';
 import { getHealthData } from '@/lib/api';
 import { HealthData } from '../data-manager/schema';
 import { Header } from '../common/header';
+import { DataMerger } from './data-merger';
 
 const chartConfig = {
   cases: { label: 'New Cases', color: 'hsl(var(--chart-1))' },
@@ -102,7 +103,7 @@ export function DashboardPage({ dictionary, lang }: DashboardPageProps) {
             <Loader2 className="h-12 w-12 animate-spin text-primary" />
           </div>
         ) : (
-        <>
+        <div className="space-y-6">
           <section>
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-xl font-semibold text-foreground/90">
@@ -161,7 +162,9 @@ export function DashboardPage({ dictionary, lang }: DashboardPageProps) {
             </div>
           </section>
 
-          <section className="mt-6">
+          <DataMerger dictionary={dictionary} />
+
+          <section>
             <div className="flex items-center justify-between mb-4">
                 <h2 className="text-xl font-semibold text-foreground/90">{t.monthlyTrends}</h2>
                 <div className="flex items-center gap-2 no-print">
@@ -227,9 +230,10 @@ export function DashboardPage({ dictionary, lang }: DashboardPageProps) {
               </Card>
             </div>
           </section>
-        </>
+        </div>
       )}
       </main>
     </div>
   );
 }
+

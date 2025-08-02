@@ -196,6 +196,38 @@
             "sanitation": "Sanitasi Total Berbasis Masyarakat"
         }
     },
+     "dataMerger": {
+        "title": "Big Data: Integrasi Data Pasien",
+        "description": "Temukan dan gabungkan data pasien duplikat dari berbagai dataset secara otomatis menggunakan AI.",
+        "nikLabel": "Nomor Induk Kependudukan (NIK)",
+        "nikPlaceholder": "Masukkan NIK untuk mencari duplikasi...",
+        "selectDataset": "Dataset Sumber",
+        "searchAndMerge": "Cari & Gabungkan",
+        "searching": "Mencari...",
+        "merging": "Menggabungkan...",
+        "loadingSearch": "Mencari data di seluruh dataset terpilih...",
+        "loadingMerge": "AI sedang menganalisis dan menggabungkan data duplikat...",
+        "errorTitle": "Error",
+        "errorNikRequired": "NIK diperlukan untuk memulai proses.",
+        "searchFailed": "Gagal mencari data.",
+        "mergeFailed": "Gagal menggabungkan data.",
+        "noResults": "Data Tidak Ditemukan",
+        "noResultsDesc": "Tidak ada data yang cocok dengan NIK ini di dataset yang dipilih.",
+        "singleRecord": "Hanya ditemukan satu data, tidak perlu penggabungan.",
+        "sourceRecords": "Data Sumber",
+        "mergedRecord": "Data Gabungan AI",
+        "masterData": "Data Master Pasien",
+        "confidence": "Tingkat Keyakinan",
+        "confidenceTooltip": "Kemungkinan bahwa data-data ini milik orang yang sama.",
+        "name": "Nama",
+        "address": "Alamat",
+        "dob": "Tanggal Lahir",
+        "phone": "Telepon",
+        "mergeLogic": "Logika Penggabungan",
+        "confirmMerge": "Konfirmasi & Simpan Data Master",
+        "mergeConfirmedTitle": "Penggabungan Dikonfirmasi",
+        "mergeConfirmedDesc": "Data master untuk NIK {nik} telah berhasil disimpan."
+    },
     "healthSections": {
         "p2p": "Seksi Pencegahan dan Penanggulangan Penyakit",
         "sdk": "Seksi Sumber Daya Kesehatan",
@@ -209,7 +241,7 @@
         "selatan": "Jakarta Selatan",
         "timur": "Jakarta Timur",
         "seribu": "Kepulauan Seribu",
-        "all": "Semua Wilayah"
+        "semua": "Semua Wilayah"
     },
     "months": {
         "Jan": "Jan", "Feb": "Feb", "Mar": "Mar", "Apr": "Apr", "May": "Mei", "Jun": "Jun", "Jul": "Jul", "Aug": "Ags", "Sep": "Sep", "Oct": "Okt", "Nov": "Nov", "Dec": "Des"
