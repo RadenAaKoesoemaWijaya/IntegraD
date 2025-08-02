@@ -1,3 +1,4 @@
+
 'use client';
 
 import Link from 'next/link';
@@ -19,6 +20,7 @@ export function Header({ dictionary, lang }: HeaderProps) {
         { href: `/${lang}`, label: dictionary.navigation.dashboard, path: '' },
         { href: `/${lang}/upload`, label: dictionary.navigation.dataManagement, path: '/upload' },
         { href: `/${lang}/search`, label: dictionary.navigation.dataSearch, path: '/search' },
+        { href: `/${lang}/monitoring`, label: dictionary.navigation.monitoring, path: '/monitoring' },
         { href: `/${lang}/profile`, label: dictionary.navigation.profile, path: '/profile' },
         { href: `/${lang}/admin`, label: dictionary.navigation.admin, path: '/admin' },
     ];

@@ -1,8 +1,10 @@
+
 {
     "navigation": {
         "dashboard": "Dasbor",
         "dataManagement": "Manajemen Data",
         "dataSearch": "Pencarian Data",
+        "monitoring": "Monev Program",
         "profile": "Profil",
         "admin": "Admin"
     },
@@ -162,6 +164,37 @@
         "sessionTimeout": "Batas Waktu Sesi (menit)",
         "defaultRegion": "Wilayah Default",
         "selectDefaultRegion": "Pilih wilayah default"
+    },
+    "monitoring": {
+        "title": "Pemantauan & Evaluasi Program",
+        "selectProgram": "Pilih Program Kerja",
+        "program": "Program",
+        "analyzeButton": "Analisis Kinerja Program",
+        "analyzing": "Menganalisis...",
+        "kpiTitle": "Indikator Kinerja Utama (IKU)",
+        "kpiDesc": "Metrik kinerja untuk program yang dipilih.",
+        "evaluationTitle": "Evaluasi Berbasis AI",
+        "evaluationDesc": "Analisis ahli tentang pencapaian dan efektivitas program.",
+        "recommendationsTitle": "Rekomendasi Strategis",
+        "recommendationsDesc": "Rekomendasi yang dapat ditindaklanjuti untuk meningkatkan hasil program.",
+        "loading": "Memuat analisis, harap tunggu...",
+        "error": "Gagal menganalisis data program.",
+        "kpi": {
+            "target": "Target",
+            "actual": "Realisasi",
+            "achievement": "Pencapaian",
+            "status": "Status"
+        },
+        "evaluation": {
+            "overallAssessment": "Penilaian Keseluruhan",
+            "keyFindings": "Temuan Kunci",
+            "riskAnalysis": "Analisis Risiko"
+        },
+        "programs": {
+            "stunting": "Program Penurunan Stunting",
+            "immunization": "Cakupan Imunisasi Dasar Lengkap",
+            "sanitation": "Sanitasi Total Berbasis Masyarakat"
+        }
     },
     "healthSections": {
         "p2p": "Seksi Pencegahan dan Penanggulangan Penyakit",

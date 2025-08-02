@@ -1,8 +1,10 @@
+
 {
     "navigation": {
         "dashboard": "Dashboard",
         "dataManagement": "Data Management",
         "dataSearch": "Data Search",
+        "monitoring": "Monitoring & Evaluation",
         "profile": "Profile",
         "admin": "Admin"
     },
@@ -162,6 +164,37 @@
         "sessionTimeout": "Session Timeout (minutes)",
         "defaultRegion": "Default Region",
         "selectDefaultRegion": "Select a default region"
+    },
+    "monitoring": {
+        "title": "Program Monitoring & Evaluation",
+        "selectProgram": "Select Work Program",
+        "program": "Program",
+        "analyzeButton": "Analyze Program Performance",
+        "analyzing": "Analyzing...",
+        "kpiTitle": "Key Performance Indicators (KPI)",
+        "kpiDesc": "Performance metrics for the selected program.",
+        "evaluationTitle": "AI-Powered Evaluation",
+        "evaluationDesc": "Expert analysis of program achievement and effectiveness.",
+        "recommendationsTitle": "Strategic Recommendations",
+        "recommendationsDesc": "Actionable recommendations to improve program outcomes.",
+        "loading": "Loading analysis, please wait...",
+        "error": "Failed to analyze program data.",
+        "kpi": {
+            "target": "Target",
+            "actual": "Actual",
+            "achievement": "Achievement",
+            "status": "Status"
+        },
+        "evaluation": {
+            "overallAssessment": "Overall Assessment",
+            "keyFindings": "Key Findings",
+            "riskAnalysis": "Risk Analysis"
+        },
+        "programs": {
+            "stunting": "Stunting Prevention Program",
+            "immunization": "Childhood Immunization Coverage",
+            "sanitation": "Community-Based Total Sanitation"
+        }
     },
     "healthSections": {
         "p2p": "Disease Prevention and Control Section",
