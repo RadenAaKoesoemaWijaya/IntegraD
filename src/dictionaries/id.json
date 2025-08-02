@@ -5,8 +5,9 @@
         "dataManagement": "Manajemen Data",
         "dataSearch": "Pencarian Data",
         "monitoring": "Monev Program",
+        "reporting": "Pelaporan",
         "profile": "Profil",
-        "admin": "Pengaturan"
+        "settings": "Pengaturan"
     },
     "appName": "IntegraD",
     "dashboard": {
@@ -196,7 +197,32 @@
             "sanitation": "Sanitasi Total Berbasis Masyarakat"
         }
     },
-     "dataMerger": {
+    "reporting": {
+        "title": "Pembuatan Laporan",
+        "description": "Buat dan unduh laporan dari data kesehatan.",
+        "selectTemplate": "Templat Laporan",
+        "selectTemplatePlaceholder": "Pilih templat",
+        "dateRange": "Rentang Tanggal",
+        "pickDate": "Pilih tanggal",
+        "region": "Wilayah",
+        "selectRegion": "Pilih Wilayah",
+        "allRegions": "Semua Wilayah",
+        "generateReport": "Buat Laporan",
+        "generating": "Membuat...",
+        "downloadPdf": "Unduh sebagai PDF",
+        "noData": "Tidak ada data yang tersedia untuk kriteria yang dipilih.",
+        "error": "Gagal membuat laporan.",
+        "reportTitle": "Laporan Kesehatan",
+        "generatedOn": "Dibuat pada",
+        "summary": "Ringkasan & Analisis AI",
+        "dataDetails": "Detail Data"
+    },
+    "reportTemplates": {
+        "monthly_summary": "Ringkasan Kesehatan Bulanan",
+        "vaccination_report": "Laporan Cakupan Vaksinasi",
+        "regional_comparison": "Laporan Perbandingan Regional"
+    },
+    "dataMerger": {
         "title": "Big Data: Integrasi Data Pasien",
         "description": "Temukan dan gabungkan data pasien duplikat dari berbagai dataset secara otomatis menggunakan AI.",
         "nikLabel": "Nomor Induk Kependudukan (NIK)",

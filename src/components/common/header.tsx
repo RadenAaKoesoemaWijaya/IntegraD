@@ -21,6 +21,7 @@ export function Header({ dictionary, lang }: HeaderProps) {
         { href: `/${lang}/upload`, label: dictionary.navigation.dataManagement, path: '/upload' },
         { href: `/${lang}/search`, label: dictionary.navigation.dataSearch, path: '/search' },
         { href: `/${lang}/monitoring`, label: dictionary.navigation.monitoring, path: '/monitoring' },
+        { href: `/${lang}/reporting`, label: dictionary.navigation.reporting, path: '/reporting' },
     ];
     
     // Don't show the full header on the login page
@@ -32,7 +33,7 @@ export function Header({ dictionary, lang }: HeaderProps) {
     };
 
     return (
-        <header className="sticky top-0 z-30 flex items-center gap-4 border-b bg-background/95 px-4 py-2 backdrop-blur-sm sm:px-6">
+        <header className="sticky top-0 z-30 flex items-center gap-4 border-b bg-background/95 px-4 py-2 backdrop-blur-sm sm:px-6 no-print">
             <div className="flex items-center gap-2">
                 <Logo className="h-8 w-8 text-primary" />
                 <h1 className="text-2xl font-semibold text-foreground">{dictionary.appName}</h1>

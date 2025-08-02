@@ -5,8 +5,9 @@
         "dataManagement": "Data Management",
         "dataSearch": "Data Search",
         "monitoring": "Monitoring & Evaluation",
+        "reporting": "Reporting",
         "profile": "Profile",
-        "admin": "Settings"
+        "settings": "Settings"
     },
     "appName": "IntegraD",
     "dashboard": {
@@ -195,6 +196,31 @@
             "immunization": "Childhood Immunization Coverage",
             "sanitation": "Community-Based Total Sanitation"
         }
+    },
+    "reporting": {
+        "title": "Report Generation",
+        "description": "Generate and download reports from health data.",
+        "selectTemplate": "Report Template",
+        "selectTemplatePlaceholder": "Select a template",
+        "dateRange": "Date Range",
+        "pickDate": "Pick a date",
+        "region": "Region",
+        "selectRegion": "Select Region",
+        "allRegions": "All Regions",
+        "generateReport": "Generate Report",
+        "generating": "Generating...",
+        "downloadPdf": "Download as PDF",
+        "noData": "No data available for the selected criteria.",
+        "error": "Failed to generate report.",
+        "reportTitle": "Health Report",
+        "generatedOn": "Generated on",
+        "summary": "AI Summary & Analysis",
+        "dataDetails": "Data Details"
+    },
+    "reportTemplates": {
+        "monthly_summary": "Monthly Health Summary",
+        "vaccination_report": "Vaccination Coverage Report",
+        "regional_comparison": "Regional Comparison Report"
     },
     "dataMerger": {
         "title": "Big Data: Patient Data Integration",
