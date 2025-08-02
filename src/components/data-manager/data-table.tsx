@@ -35,7 +35,7 @@ import { DataEditorDialog } from "./data-editor-dialog"
 interface DataTableProps<TData extends HealthData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
-  meta: TableMeta<TData>,
+  meta: TableMeta<TData>
   loading: boolean;
   dictionary: any;
 }
@@ -70,10 +70,7 @@ export function DataTable<TData extends HealthData, TValue>({
       columnVisibility,
       rowSelection,
     },
-    meta: {
-      ...meta,
-      dictionary: dictionary, // Pass dictionary to table meta
-    },
+    meta: meta,
   })
 
   const uniqueRegions = React.useMemo(() => {

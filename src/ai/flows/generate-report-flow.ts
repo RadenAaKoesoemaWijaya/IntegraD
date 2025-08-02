@@ -21,7 +21,7 @@ const HealthDataSchema = z.object({
     patients: z.number(),
 });
 
-export const GenerateReportInputSchema = z.object({
+const GenerateReportInputSchema = z.object({
   reportType: z.string().describe('The type of report to generate (e.g., "monthly_summary", "vaccination_report").'),
   data: z.string().describe('The health data in JSON format to be analyzed for the report.'),
   dateRange: z.string().describe('The date range for the report.'),
@@ -29,7 +29,7 @@ export const GenerateReportInputSchema = z.object({
 });
 export type GenerateReportInput = z.infer<typeof GenerateReportInputSchema>;
 
-export const GenerateReportOutputSchema = z.object({
+const GenerateReportOutputSchema = z.object({
   summary: z.string().describe('An AI-generated summary and analysis of the provided data based on the report type.'),
   detailedData: z.array(HealthDataSchema).describe('The detailed data used for the report, returned in a structured format.'),
 });

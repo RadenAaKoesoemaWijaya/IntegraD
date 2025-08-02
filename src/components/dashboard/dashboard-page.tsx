@@ -7,13 +7,14 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
-import { Users, Stethoscope, Syringe, TrendingUp, Filter, FileDown, Search, Loader2 } from 'lucide-react';
+import { Users, Stethoscope, Syringe, TrendingUp, Filter, FileDown, Search, Loader2, AlertTriangle } from 'lucide-react';
 import { TrendDetector } from './trend-detector';
 import Link from 'next/link';
 import { getHealthData } from '@/lib/api';
 import { HealthData } from '../data-manager/schema';
 import { Header } from '../common/header';
 import { DataMerger } from './data-merger';
+import { Alert, AlertDescription, AlertTitle } from '../ui/alert';
 
 const chartConfig = {
   cases: { label: 'New Cases', color: 'hsl(var(--chart-1))' },
@@ -40,6 +41,7 @@ type DashboardPageProps = {
 export function DashboardPage({ dictionary, lang }: DashboardPageProps) {
   const [allHealthData, setAllHealthData] = React.useState<HealthData[]>([]);
   const [loading, setLoading] = React.useState(true);
+  const [error, setError] = React.useState<string | null>(null);
   const [region, setRegion] = React.useState('Jakarta Pusat');
   const [isClient, setIsClient] = React.useState(false);
   const { dashboard: t, regions } = dictionary;
@@ -58,9 +60,11 @@ export function DashboardPage({ dictionary, lang }: DashboardPageProps) {
     const fetchData = async () => {
         try {
             setLoading(true);
+            setError(null);
             const data = await getHealthData();
             setAllHealthData(data);
         } catch (error) {
+            setError("Gagal memuat data dasbor. Silakan coba lagi nanti.");
             console.error(error);
         } finally {
             setLoading(false);
@@ -102,6 +106,12 @@ export function DashboardPage({ dictionary, lang }: DashboardPageProps) {
           <div className="flex justify-center items-center h-full">
             <Loader2 className="h-12 w-12 animate-spin text-primary" />
           </div>
+        ) : error ? (
+            <Alert variant="destructive" className="max-w-4xl mx-auto">
+                <AlertTriangle className="h-4 w-4" />
+                <AlertTitle>Terjadi Kesalahan</AlertTitle>
+                <AlertDescription>{error}</AlertDescription>
+            </Alert>
         ) : (
         <div className="space-y-6">
           <section>
