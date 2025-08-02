@@ -4,7 +4,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import { User, Settings } from 'lucide-react';
+import { User, Settings, LogIn } from 'lucide-react';
 import { Logo } from '../dashboard/icons';
 import LocaleSwitcher from './locale-switcher';
 
@@ -21,9 +21,10 @@ export function Header({ dictionary, lang }: HeaderProps) {
         { href: `/${lang}/upload`, label: dictionary.navigation.dataManagement, path: '/upload' },
         { href: `/${lang}/search`, label: dictionary.navigation.dataSearch, path: '/search' },
         { href: `/${lang}/monitoring`, label: dictionary.navigation.monitoring, path: '/monitoring' },
-        { href: `/${lang}/profile`, label: dictionary.navigation.profile, path: '/profile' },
-        { href: `/${lang}/admin`, label: dictionary.navigation.admin, path: '/admin' },
     ];
+    
+    // Don't show the full header on the login page
+    const isLoginPage = pathname.includes('/login');
 
     const checkActivePath = (currentPath: string, linkPath: string) => {
         if (linkPath === '') return currentPath === `/${lang}`;
@@ -36,35 +37,48 @@ export function Header({ dictionary, lang }: HeaderProps) {
                 <Logo className="h-8 w-8 text-primary" />
                 <h1 className="text-2xl font-semibold text-foreground">{dictionary.appName}</h1>
             </div>
-            <nav className="ml-4 hidden md:flex items-center gap-4 text-sm font-medium text-muted-foreground">
-                {navLinks.map((link) => (
-                    <Link
-                        key={link.href}
-                        href={link.href}
-                        className={
-                            checkActivePath(pathname, link.path)
-                                ? 'text-primary font-semibold'
-                                : 'hover:text-foreground transition-colors'
-                        }
-                    >
-                        {link.label}
-                    </Link>
-                ))}
-            </nav>
+            {!isLoginPage && (
+                 <nav className="ml-4 hidden md:flex items-center gap-4 text-sm font-medium text-muted-foreground">
+                    {navLinks.map((link) => (
+                        <Link
+                            key={link.href}
+                            href={link.href}
+                            className={
+                                checkActivePath(pathname, link.path)
+                                    ? 'text-primary font-semibold'
+                                    : 'hover:text-foreground transition-colors'
+                            }
+                        >
+                            {link.label}
+                        </Link>
+                    ))}
+                </nav>
+            )}
             <div className="ml-auto flex items-center gap-2">
                 <LocaleSwitcher />
-                <Button variant="ghost" size="icon" asChild>
-                    <Link href={`/${lang}/profile`}>
-                        <User className="h-5 w-5" />
-                        <span className="sr-only">Profile</span>
-                    </Link>
-                </Button>
-                <Button variant="ghost" size="icon" asChild>
-                    <Link href={`/${lang}/admin`}>
-                        <Settings className="h-5 w-5" />
-                        <span className="sr-only">Admin Settings</span>
-                    </Link>
-                </Button>
+                {!isLoginPage ? (
+                    <>
+                        <Button variant="ghost" size="icon" asChild>
+                            <Link href={`/${lang}/profile`}>
+                                <User className="h-5 w-5" />
+                                <span className="sr-only">Profile</span>
+                            </Link>
+                        </Button>
+                        <Button variant="ghost" size="icon" asChild>
+                            <Link href={`/${lang}/admin`}>
+                                <Settings className="h-5 w-5" />
+                                <span className="sr-only">Settings</span>
+                            </Link>
+                        </Button>
+                    </>
+                ) : (
+                    <Button variant="ghost" size="icon" asChild>
+                        <Link href={`/${lang}/login`}>
+                            <LogIn className="h-5 w-5" />
+                            <span className="sr-only">Login</span>
+                        </Link>
+                    </Button>
+                )}
             </div>
         </header>
     );

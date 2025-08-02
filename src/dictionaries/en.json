@@ -6,7 +6,7 @@
         "dataSearch": "Data Search",
         "monitoring": "Monitoring & Evaluation",
         "profile": "Profile",
-        "admin": "Admin"
+        "admin": "Settings"
     },
     "appName": "IntegraD",
     "dashboard": {
@@ -141,7 +141,7 @@
         "updateSuccessDesc": "Your profile information has been successfully updated."
     },
     "admin": {
-        "title": "Admin Settings",
+        "title": "Settings",
         "userManagement": "User Management",
         "userManagementDesc": "Manage user accounts, roles, and permissions.",
         "addUser": "Add User",

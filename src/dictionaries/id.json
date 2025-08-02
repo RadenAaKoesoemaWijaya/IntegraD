@@ -6,7 +6,7 @@
         "dataSearch": "Pencarian Data",
         "monitoring": "Monev Program",
         "profile": "Profil",
-        "admin": "Admin"
+        "admin": "Pengaturan"
     },
     "appName": "IntegraD",
     "dashboard": {
@@ -141,7 +141,7 @@
         "updateSuccessDesc": "Informasi profil Anda telah berhasil diperbarui."
     },
     "admin": {
-        "title": "Pengaturan Admin",
+        "title": "Pengaturan",
         "userManagement": "Manajemen Pengguna",
         "userManagementDesc": "Kelola akun pengguna, peran, dan izin.",
         "addUser": "Tambah Pengguna",
