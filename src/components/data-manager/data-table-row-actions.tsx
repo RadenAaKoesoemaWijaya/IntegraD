@@ -15,7 +15,6 @@ import {
 } from '@/components/ui/alert-dialog';
 import { HealthData } from './schema';
 import { DataEditorDialog } from './data-editor-dialog';
-import { useToast } from '@/hooks/use-toast';
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>;

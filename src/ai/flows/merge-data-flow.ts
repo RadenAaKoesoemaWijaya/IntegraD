@@ -27,13 +27,13 @@ const DatasetSchema = z.object({
   record: RecordSchema,
 });
 
-export const MergeDataInputSchema = z.object({
+const MergeDataInputSchema = z.object({
   nik: z.string().describe('The NIK to search for across datasets.'),
   datasets: z.array(DatasetSchema).describe('An array of datasets containing records that match the NIK.'),
 });
 export type MergeDataInput = z.infer<typeof MergeDataInputSchema>;
 
-export const MergeDataOutputSchema = z.object({
+const MergeDataOutputSchema = z.object({
   mergedRecord: RecordSchema.describe('The final, merged record with the most complete and accurate information.'),
   mergeExplanation: z
     .string()
