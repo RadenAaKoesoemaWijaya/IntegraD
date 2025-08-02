@@ -17,6 +17,7 @@ import { generateReport, GenerateReportOutput } from '@/ai/flows/generate-report
 import { Alert, AlertTitle, AlertDescription } from '../ui/alert';
 import { Separator } from '../ui/separator';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../ui/table';
+import { Label } from '../ui/label';
 
 type ReportingPageProps = {
     dictionary: any;

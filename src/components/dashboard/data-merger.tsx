@@ -27,7 +27,9 @@ type SearchResult = {
 
 export function DataMerger({ dictionary }: DataMergerProps) {
   const { toast } = useToast();
-  const { dataMerger: t, healthSections } = dictionary || { dataMerger: {}, healthSections: {} };
+  const t = dictionary.dataMerger || {};
+  const healthSections = dictionary.healthSections || {};
+
   const [nik, setNik] = React.useState('');
   const [isSearching, setIsSearching] = React.useState(false);
   const [isMerging, setIsMerging] = React.useState(false);
@@ -83,7 +85,18 @@ export function DataMerger({ dictionary }: DataMergerProps) {
     try {
         const mergeInput: MergeDataInput = {
             nik,
-            datasets: resultsToMerge,
+            datasets: resultsToMerge.map(r => ({
+                datasetName: r.datasetName,
+                record: {
+                    id: r.record.id,
+                    nik: r.record.nik,
+                    name: r.record.name,
+                    address: r.record.address,
+                    dob: r.record.dob,
+                    phone: r.record.phone,
+                    lastVisit: r.record.lastVisit,
+                }
+            })),
         };
         const result = await mergeData(mergeInput);
         setMergeResult(result);
@@ -106,7 +119,7 @@ export function DataMerger({ dictionary }: DataMergerProps) {
   const handleConfirmMerge = () => {
     toast({
         title: t.mergeConfirmedTitle,
-        description: t.mergeConfirmedDesc.replace('{nik}', nik),
+        description: t.mergeConfirmedDesc?.replace('{nik}', nik),
     });
     // Reset state after confirmation
     setNik('');
