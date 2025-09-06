@@ -284,6 +284,11 @@
         "oddsRatio": "Odds Ratio",
         "summary": "AI Summary",
         "error": "Failed to perform analysis.",
+        "errorTitle": "Error",
+        "errorInput": "Please select exposure and outcome variables.",
+        "selectExposure": "Select exposure",
+        "selectOutcome": "Select outcome",
+        "notAvailable": "N/A",
         "loading": "Running analysis..."
     }
 }

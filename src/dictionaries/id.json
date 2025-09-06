@@ -310,6 +310,11 @@
         "oddsRatio": "Rasio Ganjil",
         "summary": "Ringkasan AI",
         "error": "Gagal melakukan analisis.",
+        "errorTitle": "Kesalahan",
+        "errorInput": "Silakan pilih variabel paparan dan hasil.",
+        "selectExposure": "Pilih paparan",
+        "selectOutcome": "Pilih hasil",
+        "notAvailable": "T/A",
         "loading": "Menjalankan analisis..."
     }
 }
