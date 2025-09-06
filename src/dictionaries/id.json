@@ -6,6 +6,7 @@
         "dataSearch": "Pencarian Data",
         "monitoring": "Monev Program",
         "reporting": "Pelaporan",
+        "surveillance": "Surveilans",
         "profile": "Profil",
         "settings": "Pengaturan"
     },
@@ -271,5 +272,30 @@
     },
     "months": {
         "Jan": "Jan", "Feb": "Feb", "Mar": "Mar", "Apr": "Apr", "May": "Mei", "Jun": "Jun", "Jul": "Jul", "Aug": "Ags", "Sep": "Sep", "Oct": "Okt", "Nov": "Nov", "Dec": "Des"
+    },
+    "surveillance": {
+      "title": "Surveilans Penyakit",
+      "description": "Pemantauan real-time dan peringatan dini untuk potensi wabah penyakit.",
+      "iotIntegration": "Integrasi IoT",
+      "iotDescription": "Hubungkan perangkat IoT untuk pengumpulan data otomatis.",
+      "earlyWarning": "Peringatan Dini KLB",
+      "earlyWarningDescription": "Sistem peringatan dini otomatis untuk Kejadian Luar Biasa (KLB).",
+      "disease": "Penyakit",
+      "potentialOutbreak": "Potensi Wabah",
+      "riskLevel": "Tingkat Risiko",
+      "status": "Status",
+      "action": "Tindakan",
+      "viewDetails": "Lihat Detail"
+    },
+    "earlyWarning": {
+        "title": "Peringatan Dini Kejadian Luar Biasa (KLB)",
+        "description": "Sistem Peringatan Dini (EWS) untuk potensi wabah penyakit berdasarkan data dari berbagai sumber, termasuk perangkat IoT.",
+        "activeAlerts": "Peringatan Aktif",
+        "noActiveAlerts": "Tidak ada peringatan aktif saat ini.",
+        "alertDetails": "Detail Peringatan",
+        "riskAssessment": "Penilaian Risiko",
+        "recommendations": "Rekomendasi Tindakan",
+        "acknowledge": "Akui Peringatan",
+        "escalate": "Eskalasi Peringatan"
     }
 }

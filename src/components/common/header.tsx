@@ -22,6 +22,7 @@ export function Header({ dictionary, lang }: HeaderProps) {
         { href: `/${lang}/search`, label: dictionary.navigation.dataSearch, path: '/search' },
         { href: `/${lang}/monitoring`, label: dictionary.navigation.monitoring, path: '/monitoring' },
         { href: `/${lang}/reporting`, label: dictionary.navigation.reporting, path: '/reporting' },
+        { href: `/${lang}/surveillance`, label: dictionary.navigation.surveillance, path: '/surveillance' },
     ];
     
     // Don't show the full header on the login page
