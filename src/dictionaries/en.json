@@ -290,5 +290,25 @@
         "selectOutcome": "Select outcome",
         "notAvailable": "N/A",
         "loading": "Running analysis..."
+    },
+    "surveillance": {
+        "title": "Vector-Borne Disease Surveillance",
+        "description": "Real-time monitoring of vector-borne diseases through integrated IoT devices and early warning systems.",
+        "iotIntegration": "IoT Device Integration",
+        "iotDescription": "Monitor environmental conditions that influence vector populations.",
+        "earlyWarning": "Early Warning System",
+        "earlyWarningDescription": "Get real-time alerts for potential outbreaks based on data analysis.",
+        "riskLevel": "Risk Level",
+        "disease": "Disease",
+        "potentialOutbreak": "Potential Outbreak",
+        "status": "Status",
+        "action": "Action",
+        "viewDetails": "View Details"
+    },
+    "earlyWarning": {
+        "title": "Active Early Warnings",
+        "description": "The following potential outbreaks have been detected and require attention.",
+        "acknowledge": "Acknowledge",
+        "escalate": "Escalate"
     }
 }
