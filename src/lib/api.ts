@@ -66,3 +66,19 @@ export async function searchNik(nik: string, datasetIds: string[]): Promise<Sear
     }
     return response.json();
 }
+
+export async function runAdvancedAnalysis(data: {
+  dataset: any[];
+  exposure: string;
+  outcome: string;
+}): Promise<any> {
+  const response = await fetch(`${API_BASE_URL}/advanced-analysis`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  });
+  if (!response.ok) {
+    throw new Error('Failed to run advanced analysis');
+  }
+  return response.json();
+}

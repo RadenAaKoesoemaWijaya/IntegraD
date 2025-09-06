@@ -256,7 +256,7 @@
     },
     "healthSections": {
         "p2p": "Disease Prevention and Control Section",
-        "sdk": "Health Resources Section",
+        "sdk": "Healthcare Facility Partners",
         "kesmas": "Public Health Section",
         "yankes": "Health Services Section"
     },
@@ -271,5 +271,19 @@
     },
     "months": {
         "Jan": "Jan", "Feb": "Feb", "Mar": "Mar", "Apr": "Apr", "May": "May", "Jun": "Jun", "Jul": "Jul", "Aug": "Aug", "Sep": "Sep", "Oct": "Oct", "Nov": "Nov", "Dec": "Dec"
+    },
+    "advancedAnalysis": {
+        "title": "Advanced Statistical Analysis",
+        "description": "Perform advanced statistical analysis on your datasets, such as calculating risk ratios and odds ratios.",
+        "selectDataset": "Select Dataset",
+        "exposureVariable": "Exposure Variable",
+        "outcomeVariable": "Outcome Variable",
+        "calculate": "Calculate",
+        "analysisResults": "Analysis Results",
+        "riskRatio": "Risk Ratio",
+        "oddsRatio": "Odds Ratio",
+        "summary": "AI Summary",
+        "error": "Failed to perform analysis.",
+        "loading": "Running analysis..."
     }
 }

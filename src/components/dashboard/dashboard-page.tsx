@@ -14,6 +14,7 @@ import { getHealthData } from '@/lib/api';
 import { HealthData } from '../data-manager/schema';
 import { Header } from '../common/header';
 import { DataMerger } from './data-merger';
+import { AdvancedAnalysis } from './advanced-analysis';
 import { Alert, AlertDescription, AlertTitle } from '../ui/alert';
 
 const chartConfig = {
@@ -175,6 +176,10 @@ export function DashboardPage({ dictionary, lang }: DashboardPageProps) {
           <DataMerger dictionary={dictionary} />
 
           <section>
+            <AdvancedAnalysis dictionary={dictionary} lang={lang} healthData={allHealthData} />
+          </section>
+
+          <section>
             <div className="flex items-center justify-between mb-4">
                 <h2 className="text-xl font-semibold text-foreground/90">{t.monthlyTrends}</h2>
                 <div className="flex items-center gap-2 no-print">
@@ -246,4 +251,3 @@ export function DashboardPage({ dictionary, lang }: DashboardPageProps) {
     </div>
   );
 }
-

@@ -257,7 +257,7 @@
     },
     "healthSections": {
         "p2p": "Seksi Pencegahan dan Penanggulangan Penyakit",
-        "sdk": "Seksi Sumber Daya Kesehatan",
+        "sdk": "Mitra Fasilitas Pelayanan Kesehatan",
         "kesmas": "Seksi Kesehatan Masyarakat",
         "yankes": "Seksi Pelayanan Kesehatan"
     },
@@ -297,5 +297,19 @@
         "recommendations": "Rekomendasi Tindakan",
         "acknowledge": "Akui Peringatan",
         "escalate": "Eskalasi Peringatan"
+    },
+    "advancedAnalysis": {
+        "title": "Analisis Statistik Lanjutan",
+        "description": "Lakukan analisis statistik lanjutan pada kumpulan data Anda, seperti menghitung rasio risiko dan rasio ganjil.",
+        "selectDataset": "Pilih Kumpulan Data",
+        "exposureVariable": "Variabel Paparan",
+        "outcomeVariable": "Variabel Hasil",
+        "calculate": "Hitung",
+        "analysisResults": "Hasil Analisis",
+        "riskRatio": "Rasio Risiko",
+        "oddsRatio": "Rasio Ganjil",
+        "summary": "Ringkasan AI",
+        "error": "Gagal melakukan analisis.",
+        "loading": "Menjalankan analisis..."
     }
 }
