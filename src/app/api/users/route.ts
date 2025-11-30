@@ -1,13 +1,19 @@
 import { NextResponse } from 'next/server';
 import { User } from '@/components/admin/schema';
-
-const users: User[] = [
-    { id: 'usr_001', name: 'Budi Santoso', email: 'budi.santoso@example.com', role: 'Admin', status: 'Active' },
-    { id: 'usr_002', name: 'Citra Lestari', email: 'citra.lestari@example.com', role: 'Data Manager', status: 'Active' },
-    { id: 'usr_003', name: 'Agus Wijaya', email: 'agus.wijaya@example.com', role: 'Viewer', status: 'Inactive' },
-    { id: 'usr_004', name: 'Dewi Anggraini', email: 'dewi.anggraini@example.com', role: 'Data Manager', status: 'Active' },
-];
+import { db } from '@/lib/firebase';
+import { collection, getDocs } from 'firebase/firestore';
 
 export async function GET() {
-  return NextResponse.json(users);
+  try {
+    const querySnapshot = await getDocs(collection(db, 'users'));
+    const users: User[] = [];
+    querySnapshot.forEach((doc) => {
+      // @ts-ignore
+      users.push({ id: doc.id, ...doc.data() });
+    });
+    return NextResponse.json(users);
+  } catch (error) {
+    console.error("Error fetching users:", error);
+    return NextResponse.json({ error: 'Failed to fetch users' }, { status: 500 });
+  }
 }

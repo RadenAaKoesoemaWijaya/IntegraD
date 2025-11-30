@@ -44,6 +44,6 @@ export const columns: ColumnDef<HealthData>[] = [
   },
   {
     id: "actions",
-    cell: ({ row, table }) => <DataTableRowActions row={row} dictionary={table.options.meta?.dictionary} />,
+    cell: ({ row, table }) => <DataTableRowActions row={row} table={table} dictionary={table.options.meta?.dictionary} />,
   },
 ]

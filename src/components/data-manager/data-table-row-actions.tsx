@@ -19,26 +19,26 @@ import { DataEditorDialog } from './data-editor-dialog';
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>;
   dictionary: any;
+  table: any;
 }
 
 export function DataTableRowActions<TData>({
   row,
   dictionary,
+  table,
 }: DataTableRowActionsProps<TData>) {
   const healthData = row.original as HealthData;
   const { admin: tAdmin, deleteDialog: tDelete } = dictionary;
 
-
   const onSave = (updatedData: HealthData | Omit<HealthData, 'id'>) => {
     if ('id' in updatedData) {
-        row.table.options.meta?.updateRow?.(updatedData);
+      table.options.meta?.updateRow?.(updatedData);
     }
   };
 
   const onDelete = () => {
-    row.table.options.meta?.removeRow?.(healthData.id);
+    table.options.meta?.removeRow?.(healthData.id);
   };
-
 
   return (
     <div className="flex items-center space-x-2">

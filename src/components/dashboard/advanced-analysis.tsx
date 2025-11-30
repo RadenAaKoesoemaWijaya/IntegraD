@@ -9,9 +9,17 @@ import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { runAdvancedAnalysis } from '@/lib/api'; // This function will be created later
 
-export function AdvancedAnalysis({ dictionary, lang, healthData }) {
+import { HealthData } from '../data-manager/schema';
+
+interface AdvancedAnalysisProps {
+  dictionary: any;
+  lang: string;
+  healthData: HealthData[];
+}
+
+export function AdvancedAnalysis({ dictionary, lang, healthData }: AdvancedAnalysisProps) {
   const [loading, setLoading] = React.useState(false);
-  const [analysisResult, setAnalysisResult] = React.useState(null);
+  const [analysisResult, setAnalysisResult] = React.useState<any>(null);
   const [exposure, setExposure] = React.useState('');
   const [outcome, setOutcome] = React.useState('');
   const { toast } = useToast();

@@ -9,8 +9,8 @@ import { Logo } from '../dashboard/icons';
 import LocaleSwitcher from './locale-switcher';
 
 type HeaderProps = {
-  dictionary: any;
-  lang: string;
+    dictionary: any;
+    lang: string;
 };
 
 export function Header({ dictionary, lang }: HeaderProps) {
@@ -22,9 +22,8 @@ export function Header({ dictionary, lang }: HeaderProps) {
         { href: `/${lang}/search`, label: dictionary.navigation.dataSearch, path: '/search' },
         { href: `/${lang}/monitoring`, label: dictionary.navigation.monitoring, path: '/monitoring' },
         { href: `/${lang}/reporting`, label: dictionary.navigation.reporting, path: '/reporting' },
-        { href: `/${lang}/surveillance`, label: dictionary.navigation.surveillance, path: '/surveillance' },
     ];
-    
+
     // Don't show the full header on the login page
     const isLoginPage = pathname.includes('/login');
 
@@ -40,7 +39,7 @@ export function Header({ dictionary, lang }: HeaderProps) {
                 <h1 className="text-2xl font-semibold text-foreground">{dictionary.appName}</h1>
             </div>
             {!isLoginPage && (
-                 <nav className="ml-4 hidden md:flex items-center gap-4 text-sm font-medium text-muted-foreground">
+                <nav className="ml-4 hidden md:flex items-center gap-4 text-sm font-medium text-muted-foreground">
                     {navLinks.map((link) => (
                         <Link
                             key={link.href}
