@@ -82,19 +82,19 @@ export function MonitoringPage({ dictionary, lang }: MonitoringPageProps) {
   };
 
   const getStatusChip = (achievement: number) => {
-    if (achievement >= 100) return <Badge variant="default" className="bg-green-500">{t.kpi.status}: Tercapai</Badge>;
-    if (achievement >= 90) return <Badge variant="secondary" className="bg-yellow-500 text-white">{t.kpi.status}: Hampir Tercapai</Badge>;
-    return <Badge variant="destructive">{t.kpi.status}: Belum Tercapai</Badge>;
+    if (achievement >= 100) return <Badge variant="default" className="bg-green-500">{t.kpi.status}: {t.kpi.achieved}</Badge>;
+    if (achievement >= 90) return <Badge variant="secondary" className="bg-yellow-500 text-white">{t.kpi.status}: {t.kpi.nearlyAchieved}</Badge>;
+    return <Badge variant="destructive">{t.kpi.status}: {t.kpi.notAchieved}</Badge>;
   };
 
   const getPriorityBadge = (priority: 'High' | 'Medium' | 'Low') => {
     switch (priority) {
       case 'High':
-        return <Badge variant="destructive">Tinggi</Badge>;
+        return <Badge variant="destructive">{t.priority.high}</Badge>;
       case 'Medium':
-        return <Badge variant="secondary" className="bg-yellow-500 text-white">Menengah</Badge>;
+        return <Badge variant="secondary" className="bg-yellow-500 text-white">{t.priority.medium}</Badge>;
       case 'Low':
-        return <Badge variant="default" className="bg-gray-500">Rendah</Badge>;
+        return <Badge variant="default" className="bg-gray-500">{t.priority.low}</Badge>;
     }
   };
 
@@ -118,7 +118,7 @@ export function MonitoringPage({ dictionary, lang }: MonitoringPageProps) {
             <h2 className="text-2xl font-semibold text-foreground/90">{t.title}</h2>
             <Button variant="outline" size="sm">
               <Settings className="mr-2 h-4 w-4" />
-              Kelola KPI
+              {t.manageKpi}
             </Button>
           </div>
 
@@ -126,13 +126,13 @@ export function MonitoringPage({ dictionary, lang }: MonitoringPageProps) {
             <Card>
               <CardContent className="p-8 text-center">
                 <AlertTriangle className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
-                <h3 className="text-lg font-semibold mb-2">Belum Ada Konfigurasi KPI</h3>
+                <h3 className="text-lg font-semibold mb-2">{t.noConfigTitle}</h3>
                 <p className="text-muted-foreground mb-4">
-                  Anda perlu mengkonfigurasi indikator kinerja program terlebih dahulu untuk tahun {currentYear}.
+                  {t.noConfigDesc.replace('{year}', currentYear.toString())}
                 </p>
                 <Button>
                   <Plus className="mr-2 h-4 w-4" />
-                  Tambah Konfigurasi KPI
+                  {t.addKpiConfig}
                 </Button>
               </CardContent>
             </Card>
@@ -147,7 +147,7 @@ export function MonitoringPage({ dictionary, lang }: MonitoringPageProps) {
                     <label htmlFor="program-select" className="text-sm font-medium">{t.program}</label>
                     <Select value={selectedProgramId} onValueChange={setSelectedProgramId}>
                       <SelectTrigger id="program-select">
-                        <SelectValue placeholder="Pilih program" />
+                        <SelectValue placeholder={t.selectProgramPlaceholder || t.selectProgram} />
                       </SelectTrigger>
                       <SelectContent>
                         {kpiConfigs.map(config => (
